@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_UNSUBSCRIBEFRAME_H
 
 
+#include "frame.h"
+
 class unsubscribeFrame: public frame {
 
 };

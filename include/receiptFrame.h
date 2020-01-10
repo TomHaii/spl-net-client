@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_RECEIPTFRAME_H
 
 
+#include "frame.h"
+
 class receiptFrame: public frame {
 
 };

@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_SUBSCRIBEFRAME_H
 
 
+#include "frame.h"
+
 class subscribeFrame: public frame {
 
 };

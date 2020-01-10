@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_CONNECTEDFRAME_H
 
 
+#include "frame.h"
+
 class connectedFrame: public frame {
 
 };

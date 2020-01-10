@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_MESSAGEFRAME_H
 
 
+#include "frame.h"
+
 class messageFrame: public frame {
 
 };

@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <boost/asio.hpp>
+#include "frame.h"
 
 
 class stompEncoderDecoder{
@@ -16,6 +17,7 @@ private:
     std::vector<char> bytes;
     int len;
 public:
+    frame decodeNextByte(char nextByte);
 
 };
 

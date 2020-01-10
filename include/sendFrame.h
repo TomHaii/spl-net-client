@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_SENDFRAME_H
 
 
+#include "frame.h"
+
 class sendFrame: public frame{
 
 };

@@ -6,6 +6,8 @@
 #define BOOST_ECHO_CLIENT_DISCONNECTFRAME_H
 
 
+#include "frame.h"
+
 class disconnectFrame: public frame {
 
 };
