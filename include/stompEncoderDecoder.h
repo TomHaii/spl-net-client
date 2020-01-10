@@ -17,7 +17,7 @@ private:
     std::vector<char> bytes;
     int len;
 public:
-    frame decodeNextByte(char nextByte);
+    frame& decodeNextByte(char nextByte);
 
 };
 

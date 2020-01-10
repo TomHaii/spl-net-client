@@ -4,7 +4,8 @@
 
 #include <stompEncoderDecoder.h>
 
-frame stompEncoderDecoder::decodeNextByte(char nextByte) {
-    return nullptr;
+frame& stompEncoderDecoder::decodeNextByte(char nextByte) {
+    frame frame;
+    return frame;
 }
 
