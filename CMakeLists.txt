@@ -7,7 +7,7 @@ set(Boost_INCLUDE_DIR C:/boost/)   #here i had installed the boost files
 set(Boost_LIBRARY_DIR C:/boost/stage/lib)
 include_directories (include)
 include_directories (src)
-add_executable(Boost_Echo_Client src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h include/frame.h src/connectedFrame.cpp include/connectedFrame.h src/connectFrame.cpp include/connectFrame.h src/disconnectFrame.cpp include/disconnectFrame.h src/messageFrame.cpp include/messageFrame.h src/receiptFrame.cpp include/receiptFrame.h src/sendFrame.cpp include/sendFrame.h src/subscribeFrame.cpp include/subscribeFrame.h src/unsubscribeFrame.cpp include/unsubscribeFrame.h)
+add_executable(Boost_Echo_Client src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h)
 
 target_link_libraries(Boost_Echo_Client wsock32 ws2_32)
 find_package(Boost REQUIRED)
