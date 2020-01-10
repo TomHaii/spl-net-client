@@ -3,4 +3,18 @@ project(Boost_Echo_Client)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Boost_Echo_Client src/connectionHandler.cpp include/connectionHandler.h src/echoClient.cpp)
+set(Boost_INCLUDE_DIR C:/boost/)   #here i had installed the boost files
+set(Boost_LIBRARY_DIR C:/boost/stage/lib)
+include_directories (include)
+include_directories (src)
+add_executable(Boost_Echo_Client src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h)
+
+target_link_libraries(Boost_Echo_Client wsock32 ws2_32)
+find_package(Boost REQUIRED)
+IF (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+    target_link_libraries(Boost_Echo_Client
+            ${Boost_FILESYSTEM_LIBRARY}
+            ${Boost_SYSTEM_LIBRARY}
+            )
+endif()
