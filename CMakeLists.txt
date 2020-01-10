@@ -16,7 +16,7 @@ include_directories (src)
 include_directories(${BOOST_INCLUDE_DIRS})
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 
-add_executable(Boost_Echo_Client src/unsubscribeFrame.cpp src/subscribeFrame.cpp src/stompEncoderDecoder.cpp src/sendFrame.cpp src/receiptFrame.cpp src/messageFrame.cpp src/disconnectFrame.cpp src/connectFrame.cpp src/connectedFrame.cpp include/unsubscribeFrame.h include/subscribeFrame.h include/stompEncoderDecoder.h include/sendFrame.h include/receiptFrame.h include/messageFrame.h include/frame.h include/disconnectFrame.h include/connectedFrame.h include/connectedFrame.h src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h src/frame.cpp)
+add_executable(Boost_Echo_Client src/stompEncoderDecoder.cpp include/stompEncoderDecoder.h src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h)
 
 target_link_libraries(Boost_Echo_Client wsock32 ws2_32)
 find_package(Boost REQUIRED)
