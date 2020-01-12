@@ -18,13 +18,20 @@ Frame *stompEncoderDecoder::decodeMessage(string &msg) {
     string type = vec.at(0);
     if(type == "CONNECTED"){
         ConnectedFrame* frame = new ConnectedFrame(vec);
+        frame->setType(CONNECTED);
         return frame;
     }
     else if(type == "RECEIPT"){
         ReceiptFrame* frame = new ReceiptFrame(vec);
+        frame->setType(RECEIPT);
         return frame;
     }
     else if(type == "MESSAGE"){
         MessageFrame* frame = new MessageFrame(vec);
+        frame->setType(MESSAGE);
+        return frame;
+    }
+    else{
+        return nullptr;
     }
 }

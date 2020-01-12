@@ -12,7 +12,7 @@ class ReceiptFrame: public Frame {
 private:
     int id;
 public:
-    ReceiptFrame();
+    ReceiptFrame(vector<string>&);
     string toString() override;
 };
 

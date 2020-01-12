@@ -13,7 +13,7 @@ class ConnectedFrame: public Frame{
 private:
     string version;
 public:
-    ConnectedFrame();
+    ConnectedFrame(vector<string>&);
     string toString() override;
 };
 

@@ -4,8 +4,12 @@
 
 #include "ReceiptFrame.h"
 
-ReceiptFrame::ReceiptFrame():id(0) {
-
+ReceiptFrame::ReceiptFrame(vector<string>& msg):id(0) {
+    for(string& word: msg){
+        if(word.find("receipt-id") != string::npos){
+            id = stoi(word.substr(1, word.find(':')));
+        }
+    }
 }
 
 string ReceiptFrame::toString() {

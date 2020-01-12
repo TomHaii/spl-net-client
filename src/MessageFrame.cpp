@@ -14,7 +14,12 @@ const string &MessageFrame::getBody() const {
 
 MessageFrame::MessageFrame(vector<string>& msg)
         :destination(""), body("") {
-
+    for(string& word: msg){
+        if(word.find("destination") != string::npos){
+            destination = word.substr(1, word.find(':'));
+        }
+    }
+    body = msg.at(4);
 }
 
 string MessageFrame::toString() {
