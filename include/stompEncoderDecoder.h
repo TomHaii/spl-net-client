@@ -8,16 +8,14 @@
 #include <vector>
 #include <string>
 #include <boost/asio.hpp>
-#include "frame.h"
+#include "Frame.h"
 
 
 class stompEncoderDecoder{
 private:
-    std::vector<std::string> message;
-    std::vector<char> bytes;
-    int len;
+
 public:
-    frame& decodeNextByte(char nextByte);
+    const Frame& buildFrame(std::string& message);
 
 };
 
