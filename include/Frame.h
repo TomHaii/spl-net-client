@@ -10,11 +10,26 @@
 
 using namespace std;
 
+enum FrameType{
+    MESSAGE, CONNECTED, RECEIPT,OTHER
+};
+
 class Frame {
 protected:
     static vector<string>& buildVector(string&);
 public:
+    FrameType type;
+
     virtual string toString() = 0;
+
+    void setType(FrameType _type){
+        type = _type;
+    }
+
+    FrameType getType(){
+        return type;
+    }
+
 };
 
 

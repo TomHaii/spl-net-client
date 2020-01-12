@@ -47,7 +47,9 @@ public:
 	
     // Close down the connection properly.
     void close();
- 
+
+    void sendFullMessage(std::string &msg);
+
 }; //class ConnectionHandler
  
 #endif
