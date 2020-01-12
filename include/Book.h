@@ -10,6 +10,7 @@
 using namespace std;
 class Book {
 private:
+    string genre;
     string bookName;
     string owner;
     string borrowedFrom;
@@ -20,6 +21,10 @@ public:
     const string &getOwner() const;
 
     const string &getBorrowedFrom() const;
+
+    const string &getGenre() const;
+
+    void setBorrowedFrom(const string &borrowedFrom);
 };
 
 

@@ -13,6 +13,8 @@ using namespace std;
 class Frame {
 protected:
     static vector<string>& buildVector(string&);
+public:
+    virtual string toString() = 0;
 };
 
 

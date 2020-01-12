@@ -10,6 +10,7 @@ ConnectFrame::ConnectFrame(string & str) {
     acceptVersion = "1.2";
     host = vec.at(1);
     login = vec.at(2);
+
     passcode = vec.at(3);
 }
 
@@ -27,4 +28,8 @@ const string &ConnectFrame::getLogin() const {
 
 const string &ConnectFrame::getPasscode() const {
     return passcode;
+}
+
+string ConnectFrame::toString() {
+    return "CONNECT\naccept-version:"+acceptVersion+"\nhost:"+host+"\nlogin:"+login+"\npasscode:"+passcode+'\n'+'\u0000';
 }

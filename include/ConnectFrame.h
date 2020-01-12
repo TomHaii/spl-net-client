@@ -23,6 +23,7 @@ public:
     const string &getLogin() const;
     const string &getPasscode() const;
     ConnectFrame(string&);
+    string toString() override;
 
 };
 

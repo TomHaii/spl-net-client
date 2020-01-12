@@ -4,8 +4,6 @@
 
 #include <stompEncoderDecoder.h>
 
-const Frame& stompEncoderDecoder::buildFrame(std::string &message) {
-    Frame frame;
-    return frame;
-}
+
+
 

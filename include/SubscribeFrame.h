@@ -11,20 +11,22 @@ using namespace std;
 class SubscribeFrame: public Frame {
 private:
     string destination;
-    string id;
-    string receipt;
+    int id;
+    int receipt;
 public:
     const string &getDestination() const;
 
-    const string &getId() const;
+    int getId();
 
-    const string &getReceipt() const;
+    int getReceipt();
 
-    void setId(const string &id);
+    void setId(int id);
 
-    void setReceipt(const string &receipt);
+    void setReceipt(int receipt);
 
     SubscribeFrame(string&);
+
+    string toString() override;
 };
 
 

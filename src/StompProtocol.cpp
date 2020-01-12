@@ -13,6 +13,57 @@ StompProtocol::~StompProtocol() {
 
 }
 
-StompProtocol::StompProtocol() {
-    books = new vector<Book>();
+StompProtocol::StompProtocol():booksMap(new unordered_map<string, vector<Book>*>), userName(""), subscriptionId(1), receiptId(1) {
+}
+
+int StompProtocol::getSubscriptionId() const {
+    return subscriptionId;
+}
+
+int StompProtocol::getReceiptId() const {
+    return receiptId;
+}
+
+void StompProtocol::incrementRecIp() {
+    receiptId++;
+}
+
+void StompProtocol::incrementSubId() {
+    subscriptionId++;
+}
+
+const string &StompProtocol::getUserName() const {
+    return userName;
+}
+
+vector<Book> *StompProtocol::getBooksByGenre(string& genre) const {
+    return booksMap->at(genre);
+}
+
+void StompProtocol::addBook(Book &book) {
+    booksMap->at(book.getGenre())->push_back(book);
+}
+
+const Frame* StompProtocol::buildFrame(std::string &message) {
+    string type;
+    Frame* frame = nullptr;
+    for(char c: message){
+        if(c == ' '){
+            break;
+        }
+        type += c;
+    }
+    if(type == "login")
+        frame = new ConnectFrame(message);
+    else if(type == "join")
+        frame = new SubscribeFrame(message);
+    else if(type == "logout")
+        frame = new DisconnectFrame();
+    else {
+        SendFrame* sendFrame= new SendFrame();
+        sendFrame->buildSend(*this, message);
+        frame = sendFrame; // maybe it wont work
+    }
+
+    return frame;
 }
