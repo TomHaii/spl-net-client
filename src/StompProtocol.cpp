@@ -81,29 +81,86 @@ unordered_map<string, vector<Book> *> *StompProtocol::getBooksMap() const {
 
 vector<string>& StompProtocol::getAction(MessageFrame &frame) {
     vector<string> vec = buildVector(frame.getBody());
-    if(vec.at(0) == "returning"){
-
+    vector<string> output;
+    if(vec.at(0) == "returning"){    //0 = action, 1= book, 2= returning to
+        output.emplace_back("return");
+        string book = "";
+        for (int i = 1; i < vec.size(); i++){
+            string s = vec.at(i);
+            if (s != "to")
+                book.append(s+" ");
+            else {
+                output.push_back(s);
+                break;
+            }
+        }
+        output.push_back(vec.at(vec.size()-1));
     }
-    else if(vec.at(0) == "taking") {
-
+    else if(vec.at(0) == "taking") {  //0= action, 1= book, 2= taken from
+        output.emplace_back("take");
+        string book = "";
+        for (int i = 1; i < vec.size(); i++){
+            string s = vec.at(i);
+            if (s != "from")
+                book.append(s+" ");
+            else {
+                output.push_back(s);
+                break;
+            }
+        }
+        output.push_back(vec.at(vec.size()-1));
     }
     else if(vec.at(1) == "status"){
+        output.emplace_back("status");
+    }
+    else if(vec.at(1) == "wish"){ //0= borrow, 1= name, 2= book
+        output.emplace_back("borrow");
+        output.push_back(vec.at(0));
+        string book = "";
+        for (int i = 4; i < vec.size(); i++){
+            string s = vec.at(i);
+            book.append(s+" ");
+        }
+        output.push_back(book);
 
     }
-    else if(vec.at(1) == "wish"){
-
+    else if (vec.at(1) == "has" && vec.at(2) != "added"){ //0= has book, 1= name, 2= book
+        output.emplace_back("has book");
+        output.push_back(vec.at(0));
+        string book = "";
+        for (int i = 1; i < vec.size(); i++){
+            string s = vec.at(i);
+            book.append(s+" ");
+        }
+        output.push_back(book);
     }
-    else if (vec.at(1) == "has" && vec.at(2) != "added"){
-
+    else if (vec.at(1) == "has" && vec.at(2) == "added"){ //0= add, 1= name, 2= book
+        output.emplace_back("add");
+        output.push_back(vec.at(0));
+        string book = "";
+        for (int i = 5; i < vec.size(); i++){
+            string s = vec.at(i);
+            book.append(s+" ");
+        }
+        output.push_back(book);
     }
-    else if (vec.at(1) == "has" && vec.at(2) == "added"){
-
-    }
-
     //replying to book status
     else{
-
+        output.emplace_back("reply"); //0= reply, 1= name, 2+= books
+        string msg = frame.getBody();
+        string word = "";
+        for(int i = 0; i<msg.size(); i++){
+            char c = msg.at(i);
+            if (c == ':' | c == ',' ){
+                output.push_back(word);
+                word = "";
+            }
+            else
+                word += c;
+        }
+        output.push_back(word);
     }
+    return output;
 }
 
 vector<string> &StompProtocol::buildVector(string s) {
