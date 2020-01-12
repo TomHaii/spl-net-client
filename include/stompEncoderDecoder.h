@@ -6,11 +6,13 @@
 #define BOOST_ECHO_CLIENT_STOMPENCODERDECODER_H
 
 
+#include "Frame.h"
+
 class stompEncoderDecoder{
 private:
 
 public:
-
+    Frame& decodeMessage(string& msg);
 };
 
 

@@ -5,5 +5,6 @@
 #include <stompEncoderDecoder.h>
 
 
-
-
+Frame &stompEncoderDecoder::decodeMessage(string &msg) {
+    return <#initializer#>;
+}
