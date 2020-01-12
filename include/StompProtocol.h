@@ -16,6 +16,7 @@
 #include "SubscribeFrame.h"
 #include "SendFrame.h"
 #include "DisconnectFrame.h"
+#include "UnsubscribeFrame.h"
 
 class StompProtocol {
 private:
@@ -33,6 +34,8 @@ public:
     int getSubscriptionId() const;
 
     vector<Book> *getBooksByGenre(string&) const;
+
+    unordered_map<string, vector<Book> *> *getBooksMap() const;
 
     void addBook(Book&);
     const string &getUserName() const;

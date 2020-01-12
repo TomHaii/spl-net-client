@@ -57,6 +57,8 @@ const Frame* StompProtocol::buildFrame(std::string &message) {
         frame = new ConnectFrame(message);
     else if(type == "join")
         frame = new SubscribeFrame(message);
+    else if(type == "exit")
+        frame = new UnsubscribeFrame(message);
     else if(type == "logout")
         frame = new DisconnectFrame();
     else {
@@ -64,6 +66,10 @@ const Frame* StompProtocol::buildFrame(std::string &message) {
         sendFrame->buildSend(*this, message);
         frame = sendFrame; // maybe it wont work
     }
-
+    frame->setType(OTHER);
     return frame;
+}
+
+unordered_map<string, vector<Book> *> *StompProtocol::getBooksMap() const {
+    return booksMap;
 }

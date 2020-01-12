@@ -38,6 +38,9 @@ string SendFrame::getBookName(vector<string> &vec) const {
 
 void SendFrame::addCommend(StompProtocol &stompProtocol, string &genre, string &userName, string &bookName) {
     Book *book = new Book(genre, bookName, userName);
+    if(stompProtocol.getBooksByGenre(genre) == nullptr){
+        stompProtocol.getBooksMap()->at(genre) = new vector<Book>;
+    }
     stompProtocol.addBook(*book);
     body = userName + " has added the book " + book->getBookName();
 }

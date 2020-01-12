@@ -7,12 +7,19 @@
 
 
 #include "Frame.h"
+#include "ConnectedFrame.h"
+#include "MessageFrame.h"
+#include "ReceiptFrame.h"
+
+
+
+using namespace std;
 
 class stompEncoderDecoder{
 private:
 
 public:
-    Frame& decodeMessage(string& msg);
+    Frame* decodeMessage(string& msg);
 };
 
 

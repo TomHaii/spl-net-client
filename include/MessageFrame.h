@@ -8,22 +8,18 @@
 
 #include "Frame.h"
 using namespace std;
-class MessageFrame {
+class MessageFrame: public Frame {
 private:
-    int subscriptionId;
-    int messageId;
     string destination;
     string body;
 public:
-    MessageFrame(int subscriptionId, int messageId, const string &destination, const string &body);
-
-    int getSubscriptionId() const;
-
-    int getMessageId() const;
+    MessageFrame(vector<string>&);
 
     const string &getDestination() const;
 
     const string &getBody() const;
+
+    string toString() override;
 };
 
 
