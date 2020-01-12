@@ -24,6 +24,9 @@ private:
     string userName;
     int subscriptionId;
     int receiptId;
+
+    vector<string> &buildVector(string s);
+    vector<string>& getAction(MessageFrame &frame);
 public:
     StompProtocol();
     ~StompProtocol();
@@ -42,6 +45,9 @@ public:
 
     int getReceiptId() const;
     const Frame* buildFrame(std::string& message);
+
+
+
 
 };
 

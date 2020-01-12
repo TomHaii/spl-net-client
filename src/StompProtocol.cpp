@@ -3,9 +3,14 @@
 //
 
 #include <Frame.h>
+#include <MessageFrame.h>
 #include "StompProtocol.h"
 
 void StompProtocol::process(Frame& frame) {
+    FrameType type = frame.getType();
+    if (type == MESSAGE){
+        vector<string> action = getAction(dynamic_cast<MessageFrame &>(frame));
+    }
 
 }
 
@@ -72,4 +77,46 @@ const Frame* StompProtocol::buildFrame(std::string &message) {
 
 unordered_map<string, vector<Book> *> *StompProtocol::getBooksMap() const {
     return booksMap;
+}
+
+vector<string>& StompProtocol::getAction(MessageFrame &frame) {
+    vector<string> vec = buildVector(frame.getBody());
+    if(vec.at(0) == "returning"){
+
+    }
+    else if(vec.at(0) == "taking") {
+
+    }
+    else if(vec.at(1) == "status"){
+
+    }
+    else if(vec.at(1) == "wish"){
+
+    }
+    else if (vec.at(1) == "has" && vec.at(2) != "added"){
+
+    }
+    else if (vec.at(1) == "has" && vec.at(2) == "added"){
+
+    }
+
+    //replying to book status
+    else{
+
+    }
+}
+
+vector<string> &StompProtocol::buildVector(string s) {
+    string word = "";
+    vector<string> vec;
+    for (char c : s){
+        if(c == ' ') {
+            vec.push_back(word);
+            word = "";
+        }
+        else{
+            word += c;
+        }
+    }
+    return vec;
 }
