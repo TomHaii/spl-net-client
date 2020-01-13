@@ -23,14 +23,10 @@ int main (int argc, char *argv[]) {
         return 1;
     }
     else {
-        StompProtocol stompProtocol = new StompProtocol(connectionHandler);
+        StompProtocol *stompProtocol = new StompProtocol(connectionHandler);
         stompEncoderDecoder encoderDecoder;
-        KeyboardListener keyboardListener(connectionHandler, stompProtocol);
-        ServerListener serverListener(connectionHandler, stompProtocol, encoderDecoder);
-
-        std::cout << "finished initiating services" << std::endl;
-        //From here we will see the rest of the ehco client implementation:
-        std::cout << " waiting for terminate " << std::endl;
+        KeyboardListener keyboardListener(connectionHandler, *stompProtocol);
+        ServerListener serverListener(connectionHandler, *stompProtocol, encoderDecoder);
         std::thread th1(std::ref(keyboardListener));
         std::thread th2(std::ref(serverListener));
         th1.join();

@@ -12,9 +12,6 @@ void Client::setBooksMap(unordered_map<string, vector<Book*> *> *booksMap) {
     Client::booksMap = booksMap;
 }
 
-const string &Client::getName() const {
-    return name;
-}
 
 void Client::setName(const string &name) {
     Client::name = name;

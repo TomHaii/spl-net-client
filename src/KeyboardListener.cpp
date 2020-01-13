@@ -20,7 +20,6 @@ KeyboardListener::KeyboardListener(ConnectionHandler &_handler, StompProtocol &_
 
 void KeyboardListener::operator()() {
     while(!terminate) {
-        std::cout << "blabla" << std::endl;
         const short bufsize = 1024;
         char buf[bufsize];
         std::cin.getline(buf, bufsize);

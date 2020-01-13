@@ -11,7 +11,6 @@ vector<string> Frame::buildVector(string & s) {
     for (char c : s){
         if(c == ' ') {
             vec.push_back(word);
-            std::cout << "word " + word << std::endl;
             word = "";
         }
         else{

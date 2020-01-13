@@ -20,11 +20,12 @@
 class Client;
 class Frame;
 class MessageFrame;
+class ConnectionHandler;
 
 class StompProtocol {
 private:
     Client* client{};
-    ConneConnectionHandler &handler;
+    ConnectionHandler &handler;
     static vector<string> buildVector(string& s);
     static vector<string>& getAction(MessageFrame &frame);
     void takeAction(MessageFrame &msg, vector<string> &action) const;
