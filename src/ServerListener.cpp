@@ -32,7 +32,7 @@ void ServerListener::operator()() {
             std::cout << "Disconnected. Exiting...\n" << std::endl;
         }
         Frame *frame = stompProtocol.buildFrame(answer);
-        stompProtocol.process(*frame);
+        stompProtocol.process(frame);
         std::cout << frame->toString() << std::endl;
         int len = answer.length();
         // A C string must end with a 0 char delimiter.  When we filled the answer buffer from the socket

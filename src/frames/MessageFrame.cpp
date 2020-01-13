@@ -23,5 +23,5 @@ MessageFrame::MessageFrame(vector<string>& msg)
 }
 
 string MessageFrame::toString() {
-    return "TODO: result message for messageframe";
+    return body;
 }

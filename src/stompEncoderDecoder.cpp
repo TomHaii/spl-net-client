@@ -3,6 +3,7 @@
 //
 
 #include <stompEncoderDecoder.h>
+#include <frames/ErrorFrame.h>
 
 
 Frame *stompEncoderDecoder::decodeMessage(string &msg) {
@@ -30,6 +31,9 @@ Frame *stompEncoderDecoder::decodeMessage(string &msg) {
         MessageFrame* frame = new MessageFrame(vec);
         frame->setType(MESSAGE);
         return frame;
+    } else if (type == "ERROR"){
+        ErrorFrame* frame = new ErrorFrame(vec);
+        frame->setType(ERROR);
     }
     else{
         return nullptr;

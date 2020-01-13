@@ -19,19 +19,25 @@
 
 class Client;
 class Frame;
+class MessageFrame;
 
 class StompProtocol {
 private:
-    Client* client;
-    vector<string> buildVector(string& s);
-    vector<string> getAction(MessageFrame &frame);
+    Client* client{};
+    ConneConnectionHandler &handler;
+    static vector<string> buildVector(string& s);
+    static vector<string>& getAction(MessageFrame &frame);
+    void takeAction(MessageFrame &msg, vector<string> &action) const;
+    void returnAction(MessageFrame&, vector<string>&) const;
+    void borrowAction(MessageFrame&, vector<string>&) const;
+    void hasBookAction(MessageFrame&, vector<string>&) const;
+    void statusAction(MessageFrame &, vector<string> &) const;
 
 public:
 
-    StompProtocol();
-    Client *getClient();
+    StompProtocol(ConnectionHandler&);
     ~StompProtocol();
-    void process(Frame &);
+    void process(Frame *);
     Frame *buildFrame(std::string &message);
 
 };

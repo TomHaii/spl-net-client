@@ -4,11 +4,11 @@
 
 #include "Client.h"
 
-unordered_map<string, vector<Book> *> *Client::getBooksMap() const {
+unordered_map<string, vector<Book*> *> *Client::getBooksMap() const {
     return booksMap;
 }
 
-void Client::setBooksMap(unordered_map<string, vector<Book> *> *booksMap) {
+void Client::setBooksMap(unordered_map<string, vector<Book*> *> *booksMap) {
     Client::booksMap = booksMap;
 }
 
@@ -46,18 +46,20 @@ void Client::incrementSubscriptionId() {
 
 }
 
-Client::Client(const string &_name) : booksMap(new unordered_map<string,vector<Book>*>), name(_name), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame>) {}
 
-Client::Client(): booksMap(new unordered_map<string,vector<Book>*>), name(""), subscriptionId(0),receiptId(0), receipts(new unordered_map<int, ReceiptFrame>) {}
+Client::Client(): booksMap(new unordered_map<string,vector<Book*>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame*>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
 
-vector<Book> *Client::getBooksByGenre(string & topic) const {
+vector<Book*> *Client::getBooksByGenre(string topic){
     return booksMap->at(topic);
 }
 
-void Client::addBook(Book & book) {
-    string topic = book.getGenre();
-    if(booksMap->at(topic) == nullptr)
-        booksMap->at(topic) = new vector<Book>;
+void Client::addBook(Book* book) {
+    string topic = book->getGenre();
+    if(booksMap->at(topic) == nullptr) {
+        booksMap->at(topic) = new vector<Book *>;
+        requestedBooks->at(topic) = new vector<string>;
+
+    }
     booksMap->at(topic)->push_back(book);
 }
 
@@ -65,15 +67,23 @@ const string &Client::getUserName() const {
     return name;
 }
 
-void Client::addReceiptFrame(int id, ReceiptFrame &frame) {
+void Client::addReceiptFrame(int id, ReceiptFrame *frame) {
     receipts->at(id) = frame;
 }
 
-Frame& Client::getReceiptById(int id) {
+ReceiptFrame* Client::getReceiptById(int id) {
     return receipts->at(id);
 
 }
 
-unordered_map<int, ReceiptFrame> *Client::getReceipts() const {
+unordered_map<int, ReceiptFrame*> *Client::getReceipts() {
     return receipts;
+}
+
+unordered_map<int, string> *Client::getTopicsSubscriptionsById() {
+    return topicsSubscriptionsById;
+}
+
+unordered_map<string, vector<string> *> *Client::getRequestedBooks()  {
+    return requestedBooks;
 }

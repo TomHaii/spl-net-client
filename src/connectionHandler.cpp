@@ -73,26 +73,6 @@ bool ConnectionHandler::sendLine(std::string& line) {
     return sendFrameAscii(line, '\0');
 }
 
-//void ConnectionHandler::sendFullMessage(std::string &msg) {
-//    for (int i = 0; i < msg.size(); i++) {
-//        char c = msg.at(i);
-//        if (c == '\n') {
-//            string toSend = msg.substr(i);
-//            msg = msg.substr(i + 1, msg.size());
-//            bool sent = sendLine(toSend);
-//            while (!sent)
-//                sent = sendLine(toSend);
-//        } else if (c == '\u0000') {
-//            string toSend = &""[c];
-//            bool sent = sendLine(toSend);
-//            while (!sent)
-//                sent = sendLine(toSend);
-//            break;
-//        }
-//    }
-//}
-//
-//void ConnectionHandler::getFullMessage(){}
 
 bool ConnectionHandler::getFrameAscii(std::string& frame, char delimiter) {
     char ch;

@@ -12,9 +12,9 @@ class Book {
 private:
     string genre;
     string bookName;
-    string owner;
-    string borrowedFrom;
-    bool available;
+    string owner;bool available;
+public:
+    bool isAvailable() const;
 
 public:
     Book(string&, string&, string&);
@@ -22,11 +22,11 @@ public:
 
     const string &getOwner() const;
 
-    const string &getBorrowedFrom() const;
-
     const string &getGenre() const;
 
-    void setBorrowedFrom(const string &borrowedFrom);
+    void free();
+
+    void acquire();
 };
 
 

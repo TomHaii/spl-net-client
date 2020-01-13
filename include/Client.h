@@ -17,28 +17,34 @@ using namespace std;
 
 class Client {
 private:
-    unordered_map<string, vector<Book>*> *booksMap;
-
+    unordered_map<string, vector<Book*>*> *booksMap;
+    unordered_map<string, vector<string>*> *requestedBooks;
     string name;
     int subscriptionId;
     int receiptId;
-    unordered_map<int, ReceiptFrame> *receipts;
+    unordered_map<int, string>* topicsSubscriptionsById;
 
 
 public:
-    Client(const string &name);
+    unordered_map<int, string> *getTopicsSubscriptionsById();
+
+private:
+    unordered_map<int, ReceiptFrame*> *receipts;
+
+
+public:
+
+    unordered_map<string, vector<string> *> *getRequestedBooks();
 
     Client();
 
-    unordered_map<string, vector<Book> *> *getBooksMap() const;
+    unordered_map<string, vector<Book*> *> *getBooksMap() const;
 
-    void setBooksMap(unordered_map<string, vector<Book> *> *booksMap);
+    void setBooksMap(unordered_map<string, vector<Book*> *> *booksMap);
 
-    void addReceiptFrame(int id, ReceiptFrame& frame);
+    void addReceiptFrame(int id, ReceiptFrame* frame);
 
-    Frame& getReceiptById(int id);
-
-    const string &getName() const;
+    ReceiptFrame* getReceiptById(int id);
 
     void setName(const string &name);
 
@@ -54,10 +60,10 @@ public:
 
     void incrementReceiptId();
 
-    unordered_map<int, ReceiptFrame> *getReceipts() const;
+    unordered_map<int, ReceiptFrame*> *getReceipts();
 
-    vector<Book> *getBooksByGenre(string&) const;
-    void addBook(Book&);
+    vector<Book*> *getBooksByGenre(string);
+    void addBook(Book*);
     const string &getUserName() const;
 
 

@@ -21,3 +21,7 @@ string ReceiptFrame::toString() {
 ReceiptFrame::ReceiptFrame(int _id):id(_id) {
 
 }
+
+int ReceiptFrame::getId() const {
+    return id;
+}

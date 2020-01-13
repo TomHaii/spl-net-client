@@ -23,7 +23,7 @@ int main (int argc, char *argv[]) {
         return 1;
     }
     else {
-        StompProtocol stompProtocol;
+        StompProtocol stompProtocol = new StompProtocol(connectionHandler);
         stompEncoderDecoder encoderDecoder;
         KeyboardListener keyboardListener(connectionHandler, stompProtocol);
         ServerListener serverListener(connectionHandler, stompProtocol, encoderDecoder);

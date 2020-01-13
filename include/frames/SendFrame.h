@@ -19,7 +19,9 @@ private:
     string destination;
     string body;
 public:
-    SendFrame(Client&, string&);
+    SendFrame(Client*, string&);
+
+    SendFrame(string, string);
 
     const string &getDestination() const;
 
