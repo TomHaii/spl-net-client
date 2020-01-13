@@ -4,12 +4,22 @@
 
 #include <frames/Frame.h>
 #include <frames/MessageFrame.h>
+#include <iostream>
 #include "StompProtocol.h"
 
 void StompProtocol::process(Frame& frame) {
     FrameType type = frame.getType();
     if (type == MESSAGE){
         vector<string> action = getAction(dynamic_cast<MessageFrame &>(frame));
+    }
+    else if(type == CONNECTED){
+        cout << client->getUserName() + " has connected successfully";
+    }
+    else if(type == RECEIPT){
+        cout << frame.toString() << endl;
+    }
+    else if(type == ERROR){
+        cout << "error " + frame.toString() << endl;
     }
 
 }
@@ -19,11 +29,12 @@ StompProtocol::~StompProtocol() {
 }
 
 StompProtocol::StompProtocol(){
+    client = new Client();
 }
 
 
 
-const Frame* StompProtocol::buildFrame(std::string &message) {
+Frame* StompProtocol::buildFrame(std::string &message) {
     string type;
     Frame* frame = nullptr;
     for(char c: message){
@@ -32,16 +43,23 @@ const Frame* StompProtocol::buildFrame(std::string &message) {
         }
         type += c;
     }
-    if(type == "login")
+    if(type == "login") {
+        std::cout << " making new connectframe " << std::endl;
         frame = new ConnectFrame(message);
-    else if(type == "join")
+    }
+    else if(type == "join") {
+
         frame = new SubscribeFrame(message);
+//        client->getReceipts()->at(client->getReceiptId()) = new ReceiptFrame(client->getReceiptId());
+        client->incrementReceiptId();
+        client->incrementSubscriptionId();
+    }
     else if(type == "exit")
         frame = new UnsubscribeFrame(message);
     else if(type == "logout")
         frame = new DisconnectFrame();
     else {
-        SendFrame* sendFrame= new SendFrame(client, message);
+        SendFrame* sendFrame= new SendFrame(*client, message);
         frame = sendFrame; // maybe it wont work
     }
     frame->setType(OTHER);
@@ -52,12 +70,12 @@ const Frame* StompProtocol::buildFrame(std::string &message) {
 //    return booksMap;
 //}
 
-vector<string>& StompProtocol::getAction(MessageFrame& frame) {
+vector<string> StompProtocol::getAction(MessageFrame& frame) {
     vector<string> vec = buildVector(frame.getBody());
     vector<string> output;
-    if(vec.at(0) == "returning"){    //0 = action, 1= book, 2= returning to
+    if(vec.at(0) == "returning"){    //0 = return, 1= book, 2= returning to
         output.emplace_back("return");
-        string book = "";
+        string book;
         for (int i = 1; i < vec.size(); i++){
             string s = vec.at(i);
             if (s != "to")
@@ -70,9 +88,9 @@ vector<string>& StompProtocol::getAction(MessageFrame& frame) {
 
         output.push_back(vec.at(vec.size()-1));
     }
-    else if(vec.at(0) == "taking") {  //0= action, 1= book, 2= taken from
+    else if(vec.at(0) == "taking") {  //0= take, 1= book, 2= taken from
         output.emplace_back("take");
-        string book = "";
+        string book;
         for (int i = 1; i < vec.size(); i++){
             string s = vec.at(i);
             if (s != "from")
@@ -137,8 +155,8 @@ vector<string>& StompProtocol::getAction(MessageFrame& frame) {
     return output;
 }
 
-vector<string> &StompProtocol::buildVector(string s) {
-    string word = "";
+vector<string> StompProtocol::buildVector(string& s) {
+    string word;
     vector<string> vec;
     for (char c : s){
         if(c == ' ') {
@@ -152,7 +170,7 @@ vector<string> &StompProtocol::buildVector(string s) {
     return vec;
 }
 
-Client &StompProtocol::getClient() {
+Client* StompProtocol::getClient() {
     return client;
 }
 

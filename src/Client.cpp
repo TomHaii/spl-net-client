@@ -64,3 +64,16 @@ void Client::addBook(Book & book) {
 const string &Client::getUserName() const {
     return name;
 }
+
+void Client::addReceiptFrame(int id, ReceiptFrame &frame) {
+    receipts->at(id) = frame;
+}
+
+Frame& Client::getReceiptById(int id) {
+    return receipts->at(id);
+
+}
+
+unordered_map<int, ReceiptFrame> *Client::getReceipts() const {
+    return receipts;
+}

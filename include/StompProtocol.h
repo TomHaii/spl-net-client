@@ -22,17 +22,17 @@ class Frame;
 
 class StompProtocol {
 private:
-    Client client;
-    vector<string>& buildVector(string s);
-    vector<string>& getAction(MessageFrame &frame);
+    Client* client;
+    vector<string> buildVector(string& s);
+    vector<string> getAction(MessageFrame &frame);
 
 public:
 
     StompProtocol();
-    Client &getClient();
+    Client *getClient();
     ~StompProtocol();
     void process(Frame &);
-    const Frame *buildFrame(std::string &message);
+    Frame *buildFrame(std::string &message);
 
 };
 

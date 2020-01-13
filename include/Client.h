@@ -18,6 +18,7 @@ using namespace std;
 class Client {
 private:
     unordered_map<string, vector<Book>*> *booksMap;
+
     string name;
     int subscriptionId;
     int receiptId;
@@ -32,6 +33,10 @@ public:
     unordered_map<string, vector<Book> *> *getBooksMap() const;
 
     void setBooksMap(unordered_map<string, vector<Book> *> *booksMap);
+
+    void addReceiptFrame(int id, ReceiptFrame& frame);
+
+    Frame& getReceiptById(int id);
 
     const string &getName() const;
 
@@ -48,6 +53,8 @@ public:
     void incrementSubscriptionId();
 
     void incrementReceiptId();
+
+    unordered_map<int, ReceiptFrame> *getReceipts() const;
 
     vector<Book> *getBooksByGenre(string&) const;
     void addBook(Book&);

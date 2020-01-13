@@ -8,7 +8,7 @@ const string &MessageFrame::getDestination() const {
     return destination;
 }
 
-const string &MessageFrame::getBody() const {
+string &MessageFrame::getBody() {
     return body;
 }
 

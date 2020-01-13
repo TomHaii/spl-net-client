@@ -11,12 +11,12 @@
 using namespace std;
 
 enum FrameType{
-    MESSAGE, CONNECTED, RECEIPT,OTHER
+    MESSAGE, CONNECTED, RECEIPT,OTHER, ERROR
 };
 
 class Frame {
 protected:
-    static vector<string>& buildVector(string&);
+    static vector<string> buildVector(string&);
 public:
     FrameType type;
 

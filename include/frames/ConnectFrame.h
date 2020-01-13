@@ -17,7 +17,6 @@ private:
     string passcode;
 
 public:
-    ConnectFrame(ConnectFrame &string);
     const string &getAcceptVersion() const;
     const string &getHost() const;
     const string &getLogin() const;

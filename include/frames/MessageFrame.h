@@ -17,7 +17,7 @@ public:
 
     const string &getDestination() const;
 
-    const string &getBody() const;
+    string &getBody();
 
     string toString() override;
 };

@@ -4,6 +4,8 @@
 
 #include "frames/ReceiptFrame.h"
 
+
+
 ReceiptFrame::ReceiptFrame(vector<string>& msg):id(0) {
     for(string& word: msg){
         if(word.find("receipt-id") != string::npos){
@@ -13,5 +15,9 @@ ReceiptFrame::ReceiptFrame(vector<string>& msg):id(0) {
 }
 
 string ReceiptFrame::toString() {
-    return "result message for reciept";
+    return "receipt " + to_string(id) + " received";
+}
+
+ReceiptFrame::ReceiptFrame(int _id):id(_id) {
+
 }
