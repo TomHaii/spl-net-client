@@ -14,6 +14,8 @@ private:
     string bookName;
     string owner;
     string borrowedFrom;
+    bool available;
+
 public:
     Book(string&, string&, string&);
     const string &getBookName() const;

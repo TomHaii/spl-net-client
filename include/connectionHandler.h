@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <boost/asio.hpp>
-
 using boost::asio::ip::tcp;
 
 class ConnectionHandler {
@@ -48,7 +47,7 @@ public:
     // Close down the connection properly.
     void close();
 
-    void sendFullMessage(std::string &msg);
+//    void sendFullMessage(std::string &msg);
 
 }; //class ConnectionHandler
  

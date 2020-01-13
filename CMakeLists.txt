@@ -16,7 +16,7 @@ include_directories (src)
 include_directories(${BOOST_INCLUDE_DIRS})
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 
-add_executable(Boost_Echo_Client src/stompEncoderDecoder.cpp include/stompEncoderDecoder.h src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h src/Frame.cpp include/Frame.h src/StompProtocol.cpp include/StompProtocol.h src/ConnectFrame.cpp include/ConnectFrame.h src/SubscribeFrame.cpp include/SubscribeFrame.h src/SendFrame.cpp include/SendFrame.h src/Book.cpp include/Book.h src/DisconnectFrame.cpp include/DisconnectFrame.h src/MessageFrame.cpp include/MessageFrame.h src/ConnectedFrame.cpp include/ConnectedFrame.h src/UnsubscribeFrame.cpp include/UnsubscribeFrame.h src/ReceiptFrame.cpp include/ReceiptFrame.h)
+add_executable(Boost_Echo_Client src/stompEncoderDecoder.cpp include/stompEncoderDecoder.h src/echoClient.cpp src/connectionHandler.cpp include/connectionHandler.h src/frames/Frame.cpp include/frames/Frame.h src/StompProtocol.cpp include/StompProtocol.h src/frames/ConnectFrame.cpp include/frames/ConnectFrame.h src/frames/SubscribeFrame.cpp include/frames/SubscribeFrame.h src/frames/SendFrame.cpp include/frames/SendFrame.h src/Book.cpp include/Book.h src/frames/DisconnectFrame.cpp include/frames/DisconnectFrame.h src/frames/MessageFrame.cpp include/frames/MessageFrame.h src/frames/ConnectedFrame.cpp include/frames/ConnectedFrame.h src/frames/UnsubscribeFrame.cpp include/frames/UnsubscribeFrame.h src/frames/ReceiptFrame.cpp include/frames/ReceiptFrame.h src/Client.cpp include/Client.h include/StompProtocol.h)
 
 target_link_libraries(Boost_Echo_Client wsock32 ws2_32)
 find_package(Boost REQUIRED)

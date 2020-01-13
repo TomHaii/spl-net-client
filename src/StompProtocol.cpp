@@ -2,8 +2,8 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
-#include <Frame.h>
-#include <MessageFrame.h>
+#include <frames/Frame.h>
+#include <frames/MessageFrame.h>
 #include "StompProtocol.h"
 
 void StompProtocol::process(Frame& frame) {
@@ -18,36 +18,10 @@ StompProtocol::~StompProtocol() {
 
 }
 
-StompProtocol::StompProtocol():booksMap(new unordered_map<string, vector<Book>*>), userName(""), subscriptionId(1), receiptId(1) {
+StompProtocol::StompProtocol(){
 }
 
-int StompProtocol::getSubscriptionId() const {
-    return subscriptionId;
-}
 
-int StompProtocol::getReceiptId() const {
-    return receiptId;
-}
-
-void StompProtocol::incrementRecIp() {
-    receiptId++;
-}
-
-void StompProtocol::incrementSubId() {
-    subscriptionId++;
-}
-
-const string &StompProtocol::getUserName() const {
-    return userName;
-}
-
-vector<Book> *StompProtocol::getBooksByGenre(string& genre) const {
-    return booksMap->at(genre);
-}
-
-void StompProtocol::addBook(Book &book) {
-    booksMap->at(book.getGenre())->push_back(book);
-}
 
 const Frame* StompProtocol::buildFrame(std::string &message) {
     string type;
@@ -67,19 +41,18 @@ const Frame* StompProtocol::buildFrame(std::string &message) {
     else if(type == "logout")
         frame = new DisconnectFrame();
     else {
-        SendFrame* sendFrame= new SendFrame();
-        sendFrame->buildSend(*this, message);
+        SendFrame* sendFrame= new SendFrame(client, message);
         frame = sendFrame; // maybe it wont work
     }
     frame->setType(OTHER);
     return frame;
 }
 
-unordered_map<string, vector<Book> *> *StompProtocol::getBooksMap() const {
-    return booksMap;
-}
+//unordered_map<string, vector<Book> *> *StompProtocol::getBooksMap() const {
+//    return booksMap;
+//}
 
-vector<string>& StompProtocol::getAction(MessageFrame &frame) {
+vector<string>& StompProtocol::getAction(MessageFrame& frame) {
     vector<string> vec = buildVector(frame.getBody());
     vector<string> output;
     if(vec.at(0) == "returning"){    //0 = action, 1= book, 2= returning to
@@ -94,6 +67,7 @@ vector<string>& StompProtocol::getAction(MessageFrame &frame) {
                 break;
             }
         }
+
         output.push_back(vec.at(vec.size()-1));
     }
     else if(vec.at(0) == "taking") {  //0= action, 1= book, 2= taken from
@@ -122,8 +96,8 @@ vector<string>& StompProtocol::getAction(MessageFrame &frame) {
             book.append(s+" ");
         }
         output.push_back(book);
-
     }
+
     else if (vec.at(1) == "has" && vec.at(2) != "added"){ //0= has book, 1= name, 2= book
         output.emplace_back("has book");
         output.push_back(vec.at(0));
@@ -177,3 +151,8 @@ vector<string> &StompProtocol::buildVector(string s) {
     }
     return vec;
 }
+
+Client &StompProtocol::getClient() {
+    return client;
+}
+

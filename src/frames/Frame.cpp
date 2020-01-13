@@ -2,7 +2,7 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
-#include "Frame.h"
+#include "frames/Frame.h"
 
 vector<string> &Frame::buildVector(string & s) {
     string word = "";

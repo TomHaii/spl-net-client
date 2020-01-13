@@ -10,27 +10,27 @@
 #include "Book.h"
 #include "StompProtocol.h"
 
-class StompProtocol;
+class Client;
 
 using namespace std;
+
 class SendFrame: public Frame {
 private:
     string destination;
     string body;
 public:
-    SendFrame();
+    SendFrame(Client&, string&);
 
     const string &getDestination() const;
 
     const string &getBody() const;
 
-    void returnCommend(StompProtocol &stompProtocol, string &genre, const string &bookName);
+    void returnCommend(Client& client, string &genre, const string &bookName);
 
-    void addCommend(StompProtocol &stompProtocol, string &genre, string &userName, string &bookName);
+    void addCommend(Client& client, string &genre, string &userName, string &bookName);
 
     string getBookName(vector<string> &vec) const;
 
-    void buildSend(StompProtocol& stompProtocol ,string &str);
 
     string toString() override;
 };

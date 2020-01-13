@@ -2,7 +2,7 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
-#include "DisconnectFrame.h"
+#include "frames/DisconnectFrame.h"
 
 int DisconnectFrame::getReceiptId() const {
     return receiptId;

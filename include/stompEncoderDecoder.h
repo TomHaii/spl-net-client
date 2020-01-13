@@ -6,10 +6,10 @@
 #define BOOST_ECHO_CLIENT_STOMPENCODERDECODER_H
 
 
-#include "Frame.h"
-#include "ConnectedFrame.h"
-#include "MessageFrame.h"
-#include "ReceiptFrame.h"
+#include "frames/Frame.h"
+#include "frames/ConnectedFrame.h"
+#include "frames/MessageFrame.h"
+#include "frames/ReceiptFrame.h"
 
 
 

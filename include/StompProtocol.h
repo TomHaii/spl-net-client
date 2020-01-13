@@ -4,50 +4,35 @@
 
 #ifndef BOOST_ECHO_CLIENT_STOMPPROTOCOL_H
 #define BOOST_ECHO_CLIENT_STOMPPROTOCOL_H
-
-
 #include <unordered_map>
-#include "Book.h"
 #include <vector>
 #include <string>
 #include <boost/asio.hpp>
-#include "Frame.h"
-#include "ConnectFrame.h"
-#include "SubscribeFrame.h"
-#include "SendFrame.h"
-#include "DisconnectFrame.h"
-#include "UnsubscribeFrame.h"
+#include <frames/MessageFrame.h>
+#include "frames/Frame.h"
+#include "frames/ConnectFrame.h"
+#include "frames/SubscribeFrame.h"
+#include "frames/SendFrame.h"
+#include "frames/DisconnectFrame.h"
+#include "frames/UnsubscribeFrame.h"
+#include "Client.h"
+
+class Client;
+class Frame;
 
 class StompProtocol {
 private:
-    unordered_map<string, vector<Book>*> *booksMap;
-    string userName;
-    int subscriptionId;
-    int receiptId;
-
-    vector<string> &buildVector(string s);
+    Client client;
+    vector<string>& buildVector(string s);
     vector<string>& getAction(MessageFrame &frame);
+
 public:
+
     StompProtocol();
+    Client &getClient();
     ~StompProtocol();
-    void process(Frame&);
-
-    void incrementSubId();
-    void incrementRecIp();
-    int getSubscriptionId() const;
-
-    vector<Book> *getBooksByGenre(string&) const;
-
-    unordered_map<string, vector<Book> *> *getBooksMap() const;
-
-    void addBook(Book&);
-    const string &getUserName() const;
-
-    int getReceiptId() const;
-    const Frame* buildFrame(std::string& message);
-
-
-
+    void process(Frame &);
+    const Frame *buildFrame(std::string &message);
 
 };
 

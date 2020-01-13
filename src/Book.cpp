@@ -16,7 +16,7 @@ const string &Book::getBorrowedFrom() const {
     return borrowedFrom;
 }
 
-Book::Book(string& _genre, string & _bookName, string & _owner):genre(_genre),bookName(_bookName), owner(_owner) {
+Book::Book(string& _genre, string & _bookName, string & _owner):genre(_genre),bookName(_bookName), owner(_owner), available(true) {
 }
 
 void Book::setBorrowedFrom(const string &borrowedFrom) {

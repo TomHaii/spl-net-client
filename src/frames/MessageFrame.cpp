@@ -2,7 +2,7 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
-#include "MessageFrame.h"
+#include "frames/MessageFrame.h"
 
 const string &MessageFrame::getDestination() const {
     return destination;

@@ -2,7 +2,7 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
-#include <ConnectFrame.h>
+#include <frames/ConnectFrame.h>
 #include <vector>
 
 ConnectFrame::ConnectFrame(string & str) {
