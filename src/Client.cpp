@@ -5,6 +5,7 @@
 #include "Client.h"
 
 #include <utility>
+#include <iostream>
 
 unordered_map<string, vector<Book*> *> *Client::getBooksMap() const {
     return booksMap;
@@ -89,3 +90,12 @@ unordered_map<string, vector<string> *> *Client::getRequestedBooks()  {
 }
 
 Client::Client(string _name): booksMap(new unordered_map<string,vector<Book*>*>), name(std::move(_name)), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame*>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
+
+int Client::getSubscriptionIdByTopic(string& topic) {
+    for(pair<int,string> p: *topicsSubscriptionsById){
+        cout << p.second << endl;
+        if(p.second == topic)
+            return p.first;
+    }
+    return -1;
+}

@@ -2,6 +2,7 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
+#include <iostream>
 #include "frames/UnsubscribeFrame.h"
 
 
@@ -21,7 +22,8 @@ string UnsubscribeFrame::toString() {
            "\n";
 }
 
-UnsubscribeFrame::UnsubscribeFrame(string& str):id(0) {
+UnsubscribeFrame::UnsubscribeFrame(string& str, Client * client):id(0) {
     vector<string> vec = buildVector(str);
-    destination = vec.at(1);
+    string topic = vec.at(1);
+    id = client->getSubscriptionIdByTopic(topic);
 }

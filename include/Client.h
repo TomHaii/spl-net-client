@@ -23,6 +23,8 @@ private:
     int subscriptionId;
     int receiptId;
     unordered_map<int, string>* topicsSubscriptionsById;
+
+
     unordered_map<int, ReceiptFrame*> *receipts;
 
 
@@ -41,6 +43,8 @@ public:
     void setBooksMap(unordered_map<string, vector<Book*> *> *booksMap);
 
     void addReceiptFrame(int id, ReceiptFrame* frame);
+
+    int getSubscriptionIdByTopic(string& topic);
 
     ReceiptFrame* getReceiptById(int id);
 

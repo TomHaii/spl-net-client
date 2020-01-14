@@ -6,7 +6,9 @@
 #define BOOST_ECHO_CLIENT_UNSUBSCRIBEFRAME_H
 
 
+#include <Client.h>
 #include "Frame.h"
+
 
 using namespace std;
 class UnsubscribeFrame: public Frame {
@@ -14,7 +16,7 @@ private:
     string destination;
     int id;
 public:
-    UnsubscribeFrame(string& str);
+    UnsubscribeFrame(string& str, Client*);
 
     int getId();
     void setId(int receipt);

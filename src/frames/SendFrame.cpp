@@ -42,7 +42,7 @@ string SendFrame::getBookName(vector<string> &vec) const {
 
 void SendFrame::addCommend(Client& client, string &genre, string &userName, string &bookName) {
     Book *book = new Book(genre, bookName, userName);
-    if(client.getBooksByGenre(genre) == nullptr){
+    if(client.getBooksByGenre(genre) != nullptr){
         client.getBooksMap()->insert(pair<string, vector<Book *> *>(genre, new vector<Book *>));
     }
     client.addBook(book);

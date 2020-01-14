@@ -113,12 +113,14 @@ Frame* StompProtocol::buildFrame(std::string &message) {
             map->insert(pair<string, vector<Book *> *>(topic, vec));
         }
         int id = dynamic_cast<SubscribeFrame*>(frame)->getReceipt();
+        client->getTopicsSubscriptionsById()->insert(pair<int, string>(client->getSubscriptionId(), topic));
         client->getReceipts()->insert(pair<int,ReceiptFrame*>(id, nullptr));
         client->incrementReceiptId();
         client->incrementSubscriptionId();
     }
-    else if(type == "exit")
-        frame = new UnsubscribeFrame(message);
+    else if(type == "exit") {
+        frame = new UnsubscribeFrame(message, client);
+    }
     else if(type == "logout")
         frame = new DisconnectFrame();
     else {
