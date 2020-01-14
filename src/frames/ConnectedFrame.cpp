@@ -14,5 +14,6 @@ ConnectedFrame::ConnectedFrame(vector<string>& msg):version("") {
 }
 
 string ConnectedFrame::toString() {
-    return "TODO Connectedframe result";
+    return "CONNECTED\n"
+           "version:" + version;
 }

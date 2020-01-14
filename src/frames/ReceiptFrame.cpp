@@ -18,7 +18,8 @@ ReceiptFrame::ReceiptFrame(vector<string>& msg):id(0) {
 }
 
 string ReceiptFrame::toString() {
-    return "receipt " + to_string(id) + " received";
+    return "RECEIPT\n"
+           "receipt-id:"+to_string(id);
 }
 
 ReceiptFrame::ReceiptFrame(int _id):id(_id) {

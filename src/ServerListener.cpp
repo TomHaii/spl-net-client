@@ -34,12 +34,11 @@ void ServerListener::operator()() {
         //TODO: DELETE ENCODERDECODER FROM THE CONSTRUCTOR
         Frame *frame = stompEncoderDecoder::decodeMessage(answer);
         stompProtocol.process(frame);
-        std::cout << frame->toString() << std::endl;
         int len = answer.length();
         // A C string must end with a 0 char delimiter.  When we filled the answer buffer from the socket
         // we filled up to the \n char - we must make sure now that a 0 char is also present. So we truncate last character.
         answer.resize(len - 1);
-        std::cout << "Reply: " << answer << " " << len << " bytes " << std::endl << std::endl;
+        std::cout << "the answer is \n" + answer << std::endl << std::endl;
         if (answer == "bye") {
             shouldTerminate();
             std::cout << "Exiting...\n" << std::endl;

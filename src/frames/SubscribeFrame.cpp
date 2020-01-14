@@ -34,6 +34,6 @@ string SubscribeFrame::toString() {
            "destination:"+destination+"\n"
            "id:"+to_string(id)+"\n"
            "receipt:"+to_string(receipt)+
-           "\n"+'\0';
+           "\n";
 
 }

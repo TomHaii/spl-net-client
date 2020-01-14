@@ -10,13 +10,16 @@ vector<string> Frame::buildVector(string & s) {
     vector<string> vec;
     for (char c : s){
         if(c == ' ') {
-            vec.push_back(word);
-            word = "";
+            if(!word.empty()) {
+                vec.push_back(word);
+                word = "";
+            }
         }
         else{
             word += c;
         }
     }
-    vec.push_back(word);
+    if(!word.empty())
+        vec.push_back(word);
     return vec;
 }

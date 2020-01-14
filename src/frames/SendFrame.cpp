@@ -3,7 +3,7 @@
 //
 
 #include "frames/SendFrame.h"
-
+#include <iostream>
 #include <utility>
 
 SendFrame::SendFrame(Client* client, string& str):destination(""), body("") {
@@ -20,6 +20,7 @@ SendFrame::SendFrame(Client* client, string& str):destination(""), body("") {
         if (type == "add") {
             addCommend(*client, genre, userName, bookName);
         } else if (type == "borrow") {
+            client->getRequestedBooks()->at(destination)->push_back(bookName);
             body = userName + " wish to borrow " + bookName;
         } else if (type == "return") {
             returnCommend(*client, genre, bookName);
@@ -33,6 +34,9 @@ string SendFrame::getBookName(vector<string> &vec) const {
     for(unsigned long i = 2; i < vec.size(); i++){
         bookName.append(" " + vec.at(i));
     }
+    bookName=bookName.substr(1);
+
+    std::cout<<"book name is: "+bookName<<std::endl;
     return bookName;
 }
 
@@ -71,7 +75,7 @@ string SendFrame::toString() {
     return "SEND\n"
            "destination:"+destination+"\n"+
            body+
-           "\n"+'\u0000';
+           "\n";
 
 }
 

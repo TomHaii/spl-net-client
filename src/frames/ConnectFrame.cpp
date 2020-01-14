@@ -7,14 +7,12 @@
 #include <iostream>
 
 ConnectFrame::ConnectFrame(string & str) {
-    std::cout << " building connectframe with " + str << std::endl;
     vector<string> vec = buildVector(str);
     acceptVersion = "1.2";
     host = vec.at(1);
     login = vec.at(2);
     passcode = vec.at(3);
-    cout << "finished building connect frame" << endl;
-    
+
 }
 
 const string &ConnectFrame::getAcceptVersion() const {
@@ -39,5 +37,5 @@ string ConnectFrame::toString() {
            "host:"+host+"\n"+
            "login:"+login+"\n"+
            "passcode:"+passcode+
-           "\n"+'\u0000';
+           "\n";
 }

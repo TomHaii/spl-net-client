@@ -27,11 +27,9 @@ void KeyboardListener::operator()() {
         int len = line.length();
         //build frame
         std::string frameMessage = stompProtocol.buildFrame(line)->toString();
-        std::cout << "sending " + frameMessage << std::endl;
         //send full message
         if (!handler.sendLine(frameMessage)) {
             shouldTerminate();
-            std::cout << "Disconnected. Exiting...\n" << std::endl;
         }
         // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
         std::cout << "Sent " << len + 1 << " bytes to server" << std::endl;

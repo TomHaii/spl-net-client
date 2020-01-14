@@ -18,7 +18,7 @@ void UnsubscribeFrame::setId(int _id) {
 string UnsubscribeFrame::toString() {
     return "UNSUBSCRIBE\n"
            "id:"+to_string(id)+
-           "\n"+'\u0000';
+           "\n";
 }
 
 UnsubscribeFrame::UnsubscribeFrame(string& str):id(0) {

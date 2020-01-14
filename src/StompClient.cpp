@@ -35,7 +35,6 @@ int main (int argc, char *argv[]) {
         }
 
         std::cout << " sending new connect frame.. " << std::endl;
-        std::cout << tmpPort << std::endl;
         short port = (short) stoi(tmpPort);
         handler = new ConnectionHandler(host, port);
         if (!handler->connect()) {
@@ -49,6 +48,7 @@ int main (int argc, char *argv[]) {
     string res;
     handler->getLine(res);
     Frame *frame1 = stompEncoderDecoder::decodeMessage(res);
+    cout<<frame1->toString()<<endl;
     if (frame1->getType() == CONNECTED) {
         stompEncoderDecoder encoderDecoder;
         client = new Client(frame.getLogin());

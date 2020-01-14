@@ -15,10 +15,12 @@ enum FrameType{
 };
 
 class Frame {
+private:
+    FrameType type;
+
 protected:
     static vector<string> buildVector(string&);
 public:
-    FrameType type;
 
     virtual string toString() = 0;
 
