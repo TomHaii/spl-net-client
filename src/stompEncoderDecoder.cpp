@@ -36,6 +36,7 @@ Frame *stompEncoderDecoder::decodeMessage(string &msg) {
         } else if (type == "ERROR") {
             ErrorFrame *frame = new ErrorFrame(vec);
             frame->setType(ERROR);
+            return frame;
         }
     }
     return nullptr;

@@ -47,7 +47,7 @@ void Client::incrementSubscriptionId() {
 }
 
 
-Client::Client(): booksMap(new unordered_map<string,vector<Book*>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame*>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
+Client::Client(): booksMap(new unordered_map<string,vector<Book*>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
 
 vector<Book*> *Client::getBooksByGenre(string topic){
     if (booksMap->count(topic)==0)
@@ -72,12 +72,12 @@ void Client::addReceiptFrame(int id, ReceiptFrame *frame) {
     receipts->at(id) = frame;
 }
 
-ReceiptFrame* Client::getReceiptById(int id) {
+bool Client::getReceiptById(int id) {
     return receipts->at(id);
 
 }
 
-unordered_map<int, ReceiptFrame*> *Client::getReceipts() {
+unordered_map<int, bool> *Client::getReceipts() {
     return receipts;
 }
 
@@ -89,7 +89,7 @@ unordered_map<string, vector<string> *> *Client::getRequestedBooks()  {
     return requestedBooks;
 }
 
-Client::Client(string _name): booksMap(new unordered_map<string,vector<Book*>*>), name(std::move(_name)), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame*>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
+Client::Client(string _name): booksMap(new unordered_map<string,vector<Book*>*>), name(std::move(_name)), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
 
 int Client::getSubscriptionIdByTopic(string& topic) {
     for(pair<int,string> p: *topicsSubscriptionsById){
@@ -98,4 +98,12 @@ int Client::getSubscriptionIdByTopic(string& topic) {
             return p.first;
     }
     return -1;
+}
+
+int Client::getDisconnectReceipt() const {
+    return disconnectReceipt;
+}
+
+void Client::setDisconnectReceipt(int _disconnectReceipt) {
+    disconnectReceipt = _disconnectReceipt;
 }

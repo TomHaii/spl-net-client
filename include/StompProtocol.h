@@ -26,8 +26,9 @@ class StompProtocol {
 private:
     Client* client;
     ConnectionHandler &handler;
+    bool terminate = false;
     static vector<string> buildVector(string& s);
-    static vector<string>& getAction(MessageFrame &frame);
+    static vector<string>* getAction(MessageFrame &frame);
     void takeAction(MessageFrame &msg, vector<string> &action) const;
     void returnAction(MessageFrame&, vector<string>&) const;
     void borrowAction(MessageFrame&, vector<string>&) const;
@@ -35,7 +36,8 @@ private:
     void statusAction(MessageFrame &, vector<string> &) const;
 
 public:
-
+    void markAsTerminated();
+    bool shouldTerminate();
     StompProtocol(ConnectionHandler&, Client*);
     ~StompProtocol();
     void process(Frame *);

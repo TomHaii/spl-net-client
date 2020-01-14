@@ -24,8 +24,8 @@ private:
     int receiptId;
     unordered_map<int, string>* topicsSubscriptionsById;
 
-
-    unordered_map<int, ReceiptFrame*> *receipts;
+    int disconnectReceipt = -1;
+    unordered_map<int, bool> *receipts;
 
 
 public:
@@ -46,7 +46,7 @@ public:
 
     int getSubscriptionIdByTopic(string& topic);
 
-    ReceiptFrame* getReceiptById(int id);
+    bool getReceiptById(int id);
 
     void setName(const string &name);
 
@@ -62,13 +62,15 @@ public:
 
     void incrementReceiptId();
 
-    unordered_map<int, ReceiptFrame*> *getReceipts();
+    unordered_map<int, bool> *getReceipts();
 
     vector<Book*> *getBooksByGenre(string);
     void addBook(Book*);
     const string &getUserName() const;
 
+    void setDisconnectReceipt(int _disconnectReceipt);
 
+    int getDisconnectReceipt() const;
 };
 
 

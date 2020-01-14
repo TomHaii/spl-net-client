@@ -55,8 +55,10 @@ void SendFrame::returnCommend(Client& client, string &genre, const string &bookN
     for (auto it = booksList->begin() ; it != booksList->end(); ++it) {
         Book *b = *it;
         if (b->getBookName() == bookName) {
+            cout << " THE OWNER IS FSDF " + b->getOwner() << endl;
             borrowedFrom = b->getOwner();
             client.getBooksByGenre(genre)->erase(it);
+            cout << " ERASED fgklfkjgfl;" << endl;
             break;
         }
     }

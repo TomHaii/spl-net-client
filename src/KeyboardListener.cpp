@@ -19,7 +19,7 @@ KeyboardListener::KeyboardListener(ConnectionHandler &_handler, StompProtocol &_
 }
 
 void KeyboardListener::operator()() {
-    while(!terminate) {
+    while(!stompProtocol.shouldTerminate()) {
         const short bufsize = 1024;
         char buf[bufsize];
         std::cin.getline(buf, bufsize);
@@ -29,7 +29,8 @@ void KeyboardListener::operator()() {
         std::string frameMessage = stompProtocol.buildFrame(line)->toString();
         //send full message
         if (!handler.sendLine(frameMessage)) {
-            shouldTerminate();
+            stompProtocol.markAsTerminated();
+            break;
         }
         // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
         std::cout << "Sent " << len + 1 << " bytes to server" << std::endl;

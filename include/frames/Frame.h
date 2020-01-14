@@ -11,7 +11,7 @@
 using namespace std;
 
 enum FrameType{
-    MESSAGE, CONNECTED, RECEIPT,OTHER, ERROR
+    MESSAGE, CONNECTED, RECEIPT, OTHER, ERROR
 };
 
 class Frame {

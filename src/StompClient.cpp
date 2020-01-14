@@ -5,6 +5,8 @@
 //#include <connectionHandler.h>
 #include "../include/connectionHandler.h"
 
+void login(ConnectionHandler *&handler, string &inputLine);
+
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
 */
@@ -12,37 +14,7 @@ int main (int argc, char *argv[]) {
     ConnectionHandler *handler;
     Client *client = nullptr;
     string inputLine;
-    while (1) {
-        std::cout << "please enter login info ";
-        const short bufsize = 1024;
-        char buf[bufsize];
-        std::cin.getline(buf, bufsize);
-        inputLine = buf;
-        string host;
-        string tmpPort;
-        bool dots = false;
-        for (int i = 6; i < inputLine.size(); i++) {
-            char c = inputLine.at(i);
-            if (c == ':')
-                dots = true;
-            else if (c != ' ') {
-                if (dots)
-                    tmpPort += c;
-                else
-                    host += c;
-            } else
-                break;
-        }
-
-        std::cout << " sending new connect frame.. " << std::endl;
-        short port = (short) stoi(tmpPort);
-        handler = new ConnectionHandler(host, port);
-        if (!handler->connect()) {
-            std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
-            std::cout << "Trying again.." << endl;
-        } else
-            break;
-    }
+    login(handler, inputLine);
     ConnectFrame frame(inputLine);
     handler->sendLine(frame.toString());
     string res;
@@ -62,6 +34,40 @@ int main (int argc, char *argv[]) {
         th2.join();
     }
     return 0;
+}
+
+void login(ConnectionHandler *&handler, string &inputLine) {
+    while (1) {
+        cout << "please enter login info ";
+        const short bufsize = 1024;
+        char buf[bufsize];
+        cin.getline(buf, bufsize);
+        inputLine = buf;
+        string host;
+        string tmpPort;
+        bool dots = false;
+        for (int i = 6; i < inputLine.size(); i++) {
+            char c = inputLine.at(i);
+            if (c == ':')
+                dots = true;
+            else if (c != ' ') {
+                if (dots)
+                    tmpPort += c;
+                else
+                    host += c;
+            } else
+                break;
+        }
+
+        cout << " sending new connect frame.. " << endl;
+        short port = (short) stoi(tmpPort);
+        handler = new ConnectionHandler(host, port);
+        if (!handler->connect()) {
+            cerr << "Cannot connect to " << host << ":" << port << endl;
+            cout << "Trying again.." << endl;
+        } else
+            break;
+    }
 }
 
 

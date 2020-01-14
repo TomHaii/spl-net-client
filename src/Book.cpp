@@ -17,6 +17,9 @@ Book::Book(string& _genre, string & _bookName, string & _owner):genre(_genre),bo
 }
 
 
+void Book::setOwner(string& name){
+    owner = name;
+}
 
 const string &Book::getGenre() const {
     return genre;

@@ -27,6 +27,8 @@ public:
     void free();
 
     void acquire();
+
+    void setOwner(string &name);
 };
 
 
