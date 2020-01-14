@@ -12,7 +12,6 @@ ConnectFrame::ConnectFrame(string & str) {
     acceptVersion = "1.2";
     host = vec.at(1);
     login = vec.at(2);
-
     passcode = vec.at(3);
     cout << "finished building connect frame" << endl;
     
@@ -35,5 +34,10 @@ const string &ConnectFrame::getPasscode() const {
 }
 
 string ConnectFrame::toString() {
-    return "CONNECT\naccept-version:"+acceptVersion+"\nhost:"+host+"\nlogin:"+login+"\npasscode:"+passcode+'\n'+'\u0000';
+    return "CONNECT\n"
+           "accept-version:"+acceptVersion+"\n"+
+           "host:"+host+"\n"+
+           "login:"+login+"\n"+
+           "passcode:"+passcode+
+           "\n"+'\u0000';
 }

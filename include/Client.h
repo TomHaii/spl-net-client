@@ -23,18 +23,16 @@ private:
     int subscriptionId;
     int receiptId;
     unordered_map<int, string>* topicsSubscriptionsById;
+    unordered_map<int, ReceiptFrame*> *receipts;
 
 
 public:
     unordered_map<int, string> *getTopicsSubscriptionsById();
 
-private:
-    unordered_map<int, ReceiptFrame*> *receipts;
-
-
-public:
-
     unordered_map<string, vector<string> *> *getRequestedBooks();
+
+    Client(string name);
+
 
     Client();
 

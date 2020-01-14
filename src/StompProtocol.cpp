@@ -51,7 +51,7 @@ void StompProtocol::process(Frame* frame) {
         cout << frame->toString() << endl;
     }
     else if(type == ERROR){
-        cout << "error " + frame->toString() << endl;
+        cout << frame->toString() << endl;
     }
 
 }
@@ -95,6 +95,7 @@ StompProtocol::~StompProtocol() {
 
 
 Frame* StompProtocol::buildFrame(std::string &message) {
+    cout << "Started building frame " << endl;
     string type;
     Frame* frame = nullptr;
     for(char c: message){
@@ -110,8 +111,15 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         client->setName(name);
     }
     else if(type == "join") {
-        frame = new SubscribeFrame(message);
-        client->getReceipts()->at(client->getReceiptId()) = nullptr;
+        frame = new SubscribeFrame(message, client->getSubscriptionId(), client->getReceiptId());
+        string topic = dynamic_cast<SubscribeFrame*>(frame)->getDestination();
+        unordered_map<string, vector<Book*>*> *map = client->getBooksMap();
+        if(map->count(topic)==0) {
+            vector<Book *> *vec = new vector<Book *>;
+            map->insert(pair<string, vector<Book *> *>(topic, vec));
+        }
+        int id = dynamic_cast<SubscribeFrame*>(frame)->getReceipt();
+        client->getReceipts()->insert(pair<int,ReceiptFrame*>(id, nullptr));
         client->incrementReceiptId();
         client->incrementSubscriptionId();
     }
@@ -129,6 +137,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
 
 
 vector<string>& StompProtocol::getAction(MessageFrame& frame) {
+    cout<< "printing body: " + frame.getBody() <<endl;
     vector<string> vec = buildVector(frame.getBody());
     vector<string> output;
     if(vec.at(0) == "returning"){    //0 = return, 1= book, 2= returning to
@@ -189,8 +198,9 @@ vector<string>& StompProtocol::getAction(MessageFrame& frame) {
         string book;
         for (int i = 5; i < vec.size(); i++){
             string s = vec.at(i);
-            book.append(s+" ");
+            book.append(" "+s);
         }
+        book = book.substr(1);
         output.push_back(book);
     }
     //replying to book status
@@ -223,6 +233,7 @@ vector<string> StompProtocol::buildVector(string& s) {
             word += c;
         }
     }
+    vec.push_back(word);
     return vec;
 }
 
@@ -276,7 +287,7 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     handler.sendLine(m);
 }
 
-StompProtocol::StompProtocol(ConnectionHandler & _handler): handler(_handler), client(new Client) {}
+StompProtocol::StompProtocol(ConnectionHandler & _handler, Client* cl): handler(_handler), client(cl) {}
 
 
 

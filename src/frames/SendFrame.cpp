@@ -39,7 +39,7 @@ string SendFrame::getBookName(vector<string> &vec) const {
 void SendFrame::addCommend(Client& client, string &genre, string &userName, string &bookName) {
     Book *book = new Book(genre, bookName, userName);
     if(client.getBooksByGenre(genre) == nullptr){
-        client.getBooksMap()->at(genre) = new vector<Book*>;
+        client.getBooksMap()->insert(pair<string, vector<Book *> *>(genre, new vector<Book *>));
     }
     client.addBook(book);
     body = userName + " has added the book " + book->getBookName();
@@ -68,7 +68,10 @@ const string &SendFrame::getBody() const {
 }
 
 string SendFrame::toString() {
-    return "SEND\ndestination:"+destination+'\n'+body+'\n'+'\u0000';
+    return "SEND\n"
+           "destination:"+destination+"\n"+
+           body+
+           "\n"+'\u0000';
 
 }
 

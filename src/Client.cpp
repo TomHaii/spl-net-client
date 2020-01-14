@@ -4,6 +4,8 @@
 
 #include "Client.h"
 
+#include <utility>
+
 unordered_map<string, vector<Book*> *> *Client::getBooksMap() const {
     return booksMap;
 }
@@ -47,15 +49,16 @@ void Client::incrementSubscriptionId() {
 Client::Client(): booksMap(new unordered_map<string,vector<Book*>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame*>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
 
 vector<Book*> *Client::getBooksByGenre(string topic){
+    if (booksMap->count(topic)==0)
+        return nullptr;
     return booksMap->at(topic);
 }
 
 void Client::addBook(Book* book) {
     string topic = book->getGenre();
-    if(booksMap->at(topic) == nullptr) {
-        booksMap->at(topic) = new vector<Book *>;
-        requestedBooks->at(topic) = new vector<string>;
-
+    if(booksMap->count(topic) == 0) {
+        booksMap->insert(pair<string, vector<Book *> *>(topic, new vector<Book *>));
+        requestedBooks->insert(pair<string, vector<string>*>(topic, new vector<string>));
     }
     booksMap->at(topic)->push_back(book);
 }
@@ -84,3 +87,5 @@ unordered_map<int, string> *Client::getTopicsSubscriptionsById() {
 unordered_map<string, vector<string> *> *Client::getRequestedBooks()  {
     return requestedBooks;
 }
+
+Client::Client(string _name): booksMap(new unordered_map<string,vector<Book*>*>), name(std::move(_name)), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, ReceiptFrame*>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}

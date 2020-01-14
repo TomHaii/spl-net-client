@@ -25,7 +25,6 @@ void KeyboardListener::operator()() {
         std::cin.getline(buf, bufsize);
         std::string line(buf);
         int len = line.length();
-
         //build frame
         std::string frameMessage = stompProtocol.buildFrame(line)->toString();
         std::cout << "sending " + frameMessage << std::endl;

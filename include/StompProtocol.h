@@ -24,7 +24,7 @@ class ConnectionHandler;
 
 class StompProtocol {
 private:
-    Client* client{};
+    Client* client;
     ConnectionHandler &handler;
     static vector<string> buildVector(string& s);
     static vector<string>& getAction(MessageFrame &frame);
@@ -36,7 +36,7 @@ private:
 
 public:
 
-    StompProtocol(ConnectionHandler&);
+    StompProtocol(ConnectionHandler&, Client*);
     ~StompProtocol();
     void process(Frame *);
     Frame *buildFrame(std::string &message);

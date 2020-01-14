@@ -2,6 +2,7 @@
 // Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
 //
 
+#include <iostream>
 #include "frames/MessageFrame.h"
 
 const string &MessageFrame::getDestination() const {
@@ -16,9 +17,11 @@ MessageFrame::MessageFrame(vector<string>& msg)
         :destination(""), body("") {
     for(string& word: msg){
         if(word.find("destination") != string::npos){
-            destination = word.substr(1, word.find(':'));
+            int split = word.find(':');
+            destination = word.substr(split+1);
         }
     }
+
     body = msg.at(4);
 }
 

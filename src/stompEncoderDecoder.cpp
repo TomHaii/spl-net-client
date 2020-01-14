@@ -4,17 +4,22 @@
 
 #include <stompEncoderDecoder.h>
 #include <frames/ErrorFrame.h>
+#include <iostream>
 
 
 Frame *stompEncoderDecoder::decodeMessage(string &msg) {
     vector<string> vec;
     string word;
+    std::cout << " THE MESSAGE IS " + msg << std::endl;
     for(char c: msg){
         if(c == '\n') {
-            vec.push_back(word);
-            word = "";
+            if (!word.empty()) {
+                vec.push_back(word);
+                word = "";
+            }
         }
-        word += c;
+        else
+            word += c;
     }
     string type = vec.at(0);
     if(type == "CONNECTED"){

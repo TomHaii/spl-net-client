@@ -7,7 +7,8 @@
 ConnectedFrame::ConnectedFrame(vector<string>& msg):version("") {
     for(string& word: msg){
         if(word.find("version") != string::npos){
-            version = word.substr(1, word.find(':'));
+            int split = word.find(':');
+            version = word.substr(split+1);
         }
     }
 }

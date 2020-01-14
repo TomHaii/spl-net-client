@@ -13,7 +13,9 @@ void DisconnectFrame::setReceiptId(int receiptId) {
 }
 
 string DisconnectFrame::toString() {
-    return "DISCONNECT\nreceipt:"+std::to_string(receiptId)+'\n' + '\u0000';
+    return "DISCONNECT\n"
+           "receipt:"+std::to_string(receiptId)+
+           "\n" + '\u0000';
 }
 
 

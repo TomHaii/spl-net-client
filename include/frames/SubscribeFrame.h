@@ -24,7 +24,7 @@ public:
 
     void setReceipt(int receipt);
 
-    SubscribeFrame(string&);
+    SubscribeFrame(string & str, int _id, int _receipt);
 
     string toString() override;
 };

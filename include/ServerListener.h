@@ -19,7 +19,7 @@ class stompEncoderDecoder;
 using namespace std;
 class ServerListener {
 private:
-    StompProtocol& stompProtocol;
+    StompProtocol stompProtocol;
     stompEncoderDecoder& stompEncDec;
     ConnectionHandler& connectionHandler;
     bool terminate;

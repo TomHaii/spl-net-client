@@ -19,7 +19,7 @@ class stompEncoderDecoder{
 private:
 
 public:
-    Frame* decodeMessage(string& msg);
+    static Frame* decodeMessage(string& msg);
 };
 
 

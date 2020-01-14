@@ -31,7 +31,8 @@ void ServerListener::operator()() {
             shouldTerminate();
             std::cout << "Disconnected. Exiting...\n" << std::endl;
         }
-        Frame *frame = stompProtocol.buildFrame(answer);
+        //TODO: DELETE ENCODERDECODER FROM THE CONSTRUCTOR
+        Frame *frame = stompEncoderDecoder::decodeMessage(answer);
         stompProtocol.process(frame);
         std::cout << frame->toString() << std::endl;
         int len = answer.length();

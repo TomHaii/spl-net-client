@@ -15,9 +15,12 @@ const string &ErrorFrame::getBody() const {
 ErrorFrame::ErrorFrame(vector<string> &vec) {
     for (string &word: vec) {
         if (word.find("receipt-id") != string::npos) {
-            receiptId = stoi(word.substr(1, word.find(':')));
+            int split = word.find(':');
+            word = word.substr(split+1);
+            receiptId = stoi(word);
         } else if (word.find("message") != string::npos) {
-            body = word.substr(1, word.find(':'));
+            int split = word.find(':');
+            body = word.substr(split+1);
         }
     }
 }
