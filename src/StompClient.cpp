@@ -45,6 +45,8 @@ void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
         th1.join();
         th2.join();
     }
+    delete(&frame1);
+    delete(&client);
 }
 
 void login(ConnectionHandler *&handler, string &inputLine) {

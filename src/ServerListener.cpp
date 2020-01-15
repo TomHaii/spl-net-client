@@ -29,7 +29,6 @@ void ServerListener::operator()() {
 
         if (!connectionHandler.getLine(answer)) {
             std::cout << "Disconnected. Exiting...\n" << std::endl;
-            shouldTerminate();
         }
         //TODO: DELETE ENCODERDECODER FROM THE CONSTRUCTOR
         Frame *frame = stompEncoderDecoder::decodeMessage(answer);
@@ -41,7 +40,7 @@ void ServerListener::operator()() {
             answer.resize(len - 1);
             if (!answer.empty())
                 std::cout << "--received from server:-- \n" + answer << std::endl << std::endl;
-            if (stompProtocol.shouldTerminate()) {
+            if (isTerminate()) {
                 std::cout << "Exiting...\n" << std::endl;
             }
         }
