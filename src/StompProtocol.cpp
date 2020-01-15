@@ -329,4 +329,3 @@ void StompProtocol::setConnected(bool connected) {
 
 
 
-
