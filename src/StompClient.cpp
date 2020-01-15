@@ -8,6 +8,8 @@
 
 void login(ConnectionHandler *&handler, string &inputLine);
 
+void connect(ConnectionHandler *handler, Client *client, string &inputLine);
+
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
 */
@@ -16,6 +18,11 @@ int main (int argc, char *argv[]) {
     Client *client = nullptr;
     string inputLine;
     login(handler, inputLine);
+    connect(handler, client, inputLine);
+    return 0;
+}
+
+void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
     ConnectFrame frame(inputLine);
     handler->sendLine(frame.toString());
     string res;
@@ -29,14 +36,13 @@ int main (int argc, char *argv[]) {
         KeyboardListener keyboardListener(*handler, protocol);
         ServerListener serverListener(*handler,
                                       protocol);
-        std::thread th1(std::ref(keyboardListener));
-        std::thread th2(std::ref(serverListener));
+        thread th1(ref(keyboardListener));
+        thread th2(ref(serverListener));
         //TODO: delete
 //    delete (frame);
         th1.join();
         th2.join();
     }
-    return 0;
 }
 
 void login(ConnectionHandler *&handler, string &inputLine) {

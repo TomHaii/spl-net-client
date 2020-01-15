@@ -41,9 +41,9 @@ void ServerListener::operator()() {
             answer.resize(len - 1);
             if (!answer.empty())
                 std::cout << "received from server: \n" + answer << std::endl << std::endl;
-            if (answer == "bye") {
-                shouldTerminate();
+            if (stompProtocol.shouldTerminate()) {
                 std::cout << "Exiting...\n" << std::endl;
+                break;
             }
         }
     }
