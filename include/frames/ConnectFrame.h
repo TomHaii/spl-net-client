@@ -11,6 +11,7 @@ using namespace std;
 
 class ConnectFrame : public Frame{
 private:
+
     string acceptVersion;
     string host;
     string login;
@@ -24,6 +25,7 @@ public:
     ConnectFrame(string&);
     string toString() override;
 
+//    ConnectFrame();
 };
 
 #endif //BOOST_ECHO_CLIENT_CONNECTFRAME_H

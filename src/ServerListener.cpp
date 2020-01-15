@@ -5,8 +5,7 @@
 #include "ServerListener.h"
 
 
-ServerListener::ServerListener(ConnectionHandler &_connectionHandler, StompProtocol &_stompProtocol,
-                               stompEncoderDecoder &_stompEncoderDecoder):connectionHandler(_connectionHandler), stompProtocol(_stompProtocol), stompEncDec(_stompEncoderDecoder), terminate(false) {
+ServerListener::ServerListener(ConnectionHandler &_connectionHandler, StompProtocol &_stompProtocol):connectionHandler(_connectionHandler), stompProtocol(_stompProtocol), terminate(false) {
 }
 
 void ServerListener::shouldTerminate() {
@@ -40,7 +39,7 @@ void ServerListener::operator()() {
         // we filled up to the \n char - we must make sure now that a 0 char is also present. So we truncate last character.
         answer.resize(len - 1);
         if (!answer.empty())
-            std::cout << "the answer is \n" + answer << std::endl << std::endl;
+            std::cout << "received from server: \n" + answer << std::endl << std::endl;
         if (answer == "bye") {
             shouldTerminate();
             std::cout << "Exiting...\n" << std::endl;

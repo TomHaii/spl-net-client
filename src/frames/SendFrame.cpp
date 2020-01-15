@@ -36,7 +36,6 @@ string SendFrame::getBookName(vector<string> &vec) const {
     }
     bookName=bookName.substr(1);
 
-    std::cout<<"book name is: "+bookName<<std::endl;
     return bookName;
 }
 

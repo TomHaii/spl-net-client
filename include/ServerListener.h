@@ -20,11 +20,10 @@ using namespace std;
 class ServerListener {
 private:
     StompProtocol stompProtocol;
-    stompEncoderDecoder& stompEncDec;
     ConnectionHandler& connectionHandler;
     bool terminate;
 public:
-    ServerListener(ConnectionHandler& _connectionHandler, StompProtocol& _stompProtocol, stompEncoderDecoder& _stompEncoderDecoder);
+    ServerListener(ConnectionHandler& _connectionHandler, StompProtocol& _stompProtocol);
     void operator()();
     void shouldTerminate();
 
