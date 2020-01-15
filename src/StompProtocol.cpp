@@ -25,12 +25,9 @@ void StompProtocol::process(Frame* frame) {
                 } else if (action->at(0) == "hasBook") {
                     hasBookAction(msg, *action);
                 }
-                else if (action->at(0) == "add"){}
-                else if (action->at(0) ==  "bookStatusReply") {}
                 else if (action->at(0) == "status") {
                     statusAction(msg, *action);
                 }
-
 
                 action->clear();
                 //TODO: delete
@@ -166,6 +163,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
 vector<string>* StompProtocol::getAction(MessageFrame& frame) {
     vector<string> vec = buildVector(frame.getBody());
     auto* output = new vector<string>;
+
     if(vec.at(0) == "Returning"){    //0 = return, 1= book, 2= returning to
         output->emplace_back("return");
         string book;
@@ -188,10 +186,10 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
         output->push_back(book);
         output->push_back(vec.at(vec.size()-1));
     }
-    else if(vec.at(1) == "status"){
+    else if(vec.size() > 1 && vec.at(1) == "status"){
         output->emplace_back("status");
     }
-    else if(vec.at(1) == "wish"){ //0= borrow, 1= name, 2= book
+    else if(vec.size() > 1 && vec.at(1) == "wish"){ //0= borrow, 1= name, 2= book
         output->emplace_back("borrow");
         output->push_back(vec.at(0));
         string book;
@@ -203,7 +201,7 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
         output->push_back(book);
     }
 
-    else if (vec.at(1) == "has" && vec.at(2) != "added"){ //0= hasBook, 1= name, 2= book
+    else if (vec.size() > 1 && vec.at(1) == "has" && vec.at(2) != "added"){ //0= hasBook, 1= name, 2= book
         output->emplace_back("hasBook");
         output->push_back(vec.at(0));
         string book;
@@ -214,7 +212,7 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
         book = book.substr(1);
         output->push_back(book);
     }
-    else if (vec.at(1) == "has" && vec.at(2) == "added"){ //0= add, 1= name, 2= book
+    else if (vec.size() > 1 && vec.at(1) == "has" && vec.at(2) == "added"){ //0= add, 1= name, 2= book
         output->emplace_back("add");
         output->push_back(vec.at(0));
         string book;
@@ -230,7 +228,7 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
         output->emplace_back("status"); //0= status, 1=topic
         output->push_back(frame.getDestination());
     }
-    else if (!vec.empty()) { //0 == bookStatusReply
+    else { //0 == bookStatusReply
         output->emplace_back("bookStatusReply");
     }
     return output;

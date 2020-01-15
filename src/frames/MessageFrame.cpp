@@ -21,8 +21,8 @@ MessageFrame::MessageFrame(vector<string>& msg)
             destination = word.substr(split+1);
         }
     }
-
     body = msg.at(4);
+
 }
 
 string MessageFrame::toString() {
