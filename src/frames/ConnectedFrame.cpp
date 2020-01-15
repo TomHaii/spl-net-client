@@ -17,3 +17,5 @@ string ConnectedFrame::toString() {
     return "CONNECTED\n"
            "version:" + version;
 }
+
+

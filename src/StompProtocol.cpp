@@ -295,12 +295,16 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     string topic = msg.getDestination();
     string name = client->getUserName();
     string str = client->getUserName() +":";
+    string books="";
     for (Book* b: *client->getBooksByGenre(topic)){
         if (b->isAvailable()){
-            str.append(b->getBookName()+",");
+            books.append(b->getBookName()+",");
         }
     }
-    SendFrame sendFrame(str.substr(0, str.size()-1), topic);
+    if(!books.empty())
+        books = books.substr(books.size()-1);
+    str.append(books);
+    SendFrame sendFrame(str, topic);
     string m = sendFrame.toString();
     handler.sendLine(m);
 }

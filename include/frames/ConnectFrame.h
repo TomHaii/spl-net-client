@@ -18,14 +18,9 @@ private:
     string passcode;
 
 public:
-    const string &getAcceptVersion() const;
-    const string &getHost() const;
     const string &getLogin() const;
-    const string &getPasscode() const;
-    ConnectFrame(string&);
+    explicit ConnectFrame(string&);
     string toString() override;
-
-//    ConnectFrame();
 };
 
 #endif //BOOST_ECHO_CLIENT_CONNECTFRAME_H

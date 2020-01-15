@@ -23,12 +23,12 @@ private:
     int subscriptionId;
     int receiptId;
     unordered_map<int, string>* topicsSubscriptionsById;
-
     int disconnectReceipt = -1;
     unordered_map<int, bool> *receipts;
 
 
 public:
+    ~Client();
     unordered_map<int, string> *getTopicsSubscriptionsById();
 
     unordered_map<string, vector<string> *> *getRequestedBooks();

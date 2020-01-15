@@ -107,3 +107,8 @@ int Client::getDisconnectReceipt() const {
 void Client::setDisconnectReceipt(int _disconnectReceipt) {
     disconnectReceipt = _disconnectReceipt;
 }
+
+Client::~Client() {
+    for
+
+}

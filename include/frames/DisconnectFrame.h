@@ -12,7 +12,7 @@ class DisconnectFrame: public Frame {
 private:
     int receiptId;
 public:
-    DisconnectFrame(int receiptId);
+    explicit DisconnectFrame(int receiptId);
     int getReceiptId() const;
     string toString() override;
 
