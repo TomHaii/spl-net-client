@@ -103,10 +103,6 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         type += c;
     }
     if(type == "login") {
-//        if(connected){
-//            __throw_runtime_error("a different user is connected!");
-//        }
-//        std::cout << " making new connectframe " << std::endl;
         if(handler.connect()) {
             frame = new ConnectFrame(message);
             string name = dynamic_cast<ConnectFrame *>(frame)->getLogin();
