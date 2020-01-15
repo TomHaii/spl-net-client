@@ -13,7 +13,7 @@ private:
     string destination;
     string body;
 public:
-    ~MessageFrame();
+    ~MessageFrame() override;
 
     explicit MessageFrame(vector<string>&);
 

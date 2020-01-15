@@ -118,9 +118,6 @@ Client::~Client() {
         p.second->clear();
     }
     requestedBooks->clear();
-    delete(requestedBooks);
     topicsSubscriptionsById->clear();
-    delete(topicsSubscriptionsById);
     receipts->clear();
-    delete(receipts);
 }

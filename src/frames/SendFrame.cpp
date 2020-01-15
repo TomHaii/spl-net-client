@@ -83,6 +83,5 @@ SendFrame::SendFrame(string msg, string dest): body(std::move(msg)), destination
 SendFrame::~SendFrame() {
     destination.clear();
     body.clear();
-
 }
 

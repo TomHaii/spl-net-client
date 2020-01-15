@@ -17,8 +17,8 @@ public:
 public:
     ~ReceiptFrame() override = default;
 
-    ReceiptFrame(int _id);
-    ReceiptFrame(vector<string>&);
+    explicit ReceiptFrame(int _id);
+    explicit ReceiptFrame(vector<string>&);
     string toString() override;
 };
 

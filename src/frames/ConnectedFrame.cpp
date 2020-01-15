@@ -20,7 +20,6 @@ string ConnectedFrame::toString() {
 
 ConnectedFrame::~ConnectedFrame() {
     version.clear();
-
 }
 
 

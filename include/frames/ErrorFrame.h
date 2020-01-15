@@ -15,14 +15,14 @@ private:
     string body;
 
 public:
-    ~ErrorFrame();
-    ErrorFrame(vector<string>&);
+    ~ErrorFrame() override ;
+    explicit ErrorFrame(vector<string>&);
 
     int getReceiptId() const;
 
     const string &getBody() const;
 
-    string toString();
+    string toString() override;
 };
 
 

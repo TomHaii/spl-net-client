@@ -19,7 +19,7 @@ private:
     string destination;
     string body;
 public:
-    ~SendFrame();
+    ~SendFrame() override ;
 
     SendFrame(Client*, string&);
 

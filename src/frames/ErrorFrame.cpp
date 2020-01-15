@@ -31,5 +31,4 @@ string ErrorFrame::toString() {
 
 ErrorFrame::~ErrorFrame() {
     body.clear();
-
 }

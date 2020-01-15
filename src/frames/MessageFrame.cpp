@@ -32,5 +32,4 @@ string MessageFrame::toString() {
 MessageFrame::~MessageFrame() {
     destination.clear();
     body.clear();
-
 }

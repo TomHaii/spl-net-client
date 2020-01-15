@@ -31,10 +31,10 @@ string ConnectFrame::toString() {
            "\n\n";
 }
 
-ConnectFrame::~ConnectFrame() {
-    acceptVersion.clear();
-    host.clear();
-    login.clear();
-    acceptVersion.clear();
-
-}
+//ConnectFrame::~ConnectFrame() {
+//    acceptVersion.clear();
+//    host.clear();
+//    login.clear();
+//    acceptVersion.clear();
+//
+//}

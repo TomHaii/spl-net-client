@@ -54,6 +54,9 @@ void StompProtocol::process(Frame* frame) {
                 delete(client);
             }
         }
+        else if (type == ERROR){
+            markAsTerminated();
+        }
     }
 }
 
@@ -87,8 +90,9 @@ void StompProtocol::takeAction(MessageFrame &msg,
 
 
 
-StompProtocol::~StompProtocol() {
-
+StompProtocol::~StompProtocol(){
+    delete(client);
+    delete(handler);
 }
 
 
@@ -103,7 +107,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         type += c;
     }
     if(type == "login") {
-        if(handler.connect()) {
+        if(handler->connect()) {
             frame = new ConnectFrame(message);
             string name = dynamic_cast<ConnectFrame *>(frame)->getLogin();
             client->setName(name);
@@ -137,7 +141,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         for(pair <string, vector<Book*>*> p : *client->getBooksMap()){
             string msg = "exit " +p.first;
             UnsubscribeFrame exitFrame (msg, client);
-            handler.sendLine(exitFrame.toString());
+            handler->sendLine(exitFrame.toString());
         }
         int id = client->getReceiptId();
         client->setDisconnectReceipt(id);
@@ -146,8 +150,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         client->incrementReceiptId();
     }
     else {
-        SendFrame* sendFrame= new SendFrame(client, message);
-        frame = sendFrame;
+        frame = new SendFrame(client, message);
     }
     if(frame != nullptr)
         frame->setType(OTHER);
@@ -254,7 +257,7 @@ void StompProtocol::borrowAction(MessageFrame & msg, vector<string> &vec) const 
                 SendFrame sendFrame(client->getUserName() + " has " + book, topic);
                 b->acquire();
                 string str = sendFrame.toString();
-                handler.sendLine(str);
+                handler->sendLine(str);
             }
             break;
         }
@@ -275,7 +278,7 @@ void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const
                 client->getBooksByGenre(topic)->push_back(new Book(topic, book, owner));
                 SendFrame sendFrame(str, topic);
                 string m = sendFrame.toString();
-                handler.sendLine(m);
+                handler->sendLine(m);
                 break;
             }
         }
@@ -288,8 +291,7 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     cout << msg.getBody() << endl;
     string topic = msg.getDestination();
     string name = client->getUserName();
-    string str = client->getUserName() +":";
-    string books="";
+    string books;
     for (Book* b: *client->getBooksByGenre(topic)){
         if (b->isAvailable()){
             books.append(b->getBookName()+",");
@@ -297,13 +299,13 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     }
     if(!books.empty())
         books = books.substr(books.size()-1);
-    str.append(books);
+    string str =  client->getUserName() +":" +books;
     SendFrame sendFrame(str, topic);
     string m = sendFrame.toString();
-    handler.sendLine(m);
+    handler->sendLine(m);
 }
 
-StompProtocol::StompProtocol(ConnectionHandler & _handler, Client* cl): handler(_handler), client(cl) {}
+StompProtocol::StompProtocol(ConnectionHandler * _handler, Client* cl): handler(_handler), client(cl) {}
 
 bool StompProtocol::shouldTerminate() {
     return terminate;
@@ -311,7 +313,7 @@ bool StompProtocol::shouldTerminate() {
 
 void StompProtocol::markAsTerminated() {
     terminate = true;
-    handler.close();
+    handler->close();
 
 }
 

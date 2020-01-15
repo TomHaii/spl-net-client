@@ -31,22 +31,19 @@ void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
     Frame* frame1 = stompEncoderDecoder::decodeMessage(res);
     cout <<"\n"+ frame1->toString() << endl;
     if (frame1->getType() == CONNECTED) {
-        cout << " MAKING LISTENERS ON MAIN " << endl;
         client = new Client(frame.getLogin());
-        StompProtocol protocol(*handler, client);
+        StompProtocol protocol(handler, client);
         protocol.setConnected(true);
         KeyboardListener keyboardListener(*handler, protocol);
         ServerListener serverListener(*handler,
                                       protocol);
         thread th1(ref(keyboardListener));
         thread th2(ref(serverListener));
-        //TODO: delete
-//    delete (frame);
         th1.join();
         th2.join();
     }
     delete(frame1);
-    delete(client);
+
 }
 
 void login(ConnectionHandler *&handler, string &inputLine) {
