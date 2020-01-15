@@ -27,13 +27,18 @@ void KeyboardListener::operator()() {
         int len = line.length();
         //build frame
         Frame* frame =  stompProtocol.buildFrame(line);
-        std::string frameMessage =frame->toString();
-        //send full message
-        if (!handler.sendLine(frameMessage)) {
-            stompProtocol.markAsTerminated();
-            break;
+        if (frame != nullptr) {
+            std::string frameMessage = frame->toString();
+            //send full message
+            if (!handler.sendLine(frameMessage)) {
+                stompProtocol.markAsTerminated();
+                break;
+            }
+            // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
+            std::cout << "Sent " << len + 1 << " bytes to server" << std::endl;
         }
-        // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
-        std::cout << "Sent " << len + 1 << " bytes to server" << std::endl;
+        else
+            cout<<"hi im null"<<endl;
+        //TODO: delete frame
     }
 }

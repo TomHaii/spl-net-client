@@ -13,7 +13,6 @@ void StompProtocol::process(Frame* frame) {
         FrameType type = frame->getType();
         if (type == MESSAGE) {
             MessageFrame msg = *dynamic_cast<MessageFrame *>(frame);
-            cout<<"****type of message\n"+msg.toString()<<endl;
             vector<string>* action = getAction(msg);
             if (action != nullptr) {
                 if (action->at(0) == "return") {
@@ -26,24 +25,21 @@ void StompProtocol::process(Frame* frame) {
                 } else if (action->at(0) == "hasBook") {
                     hasBookAction(msg, *action);
                 }
-//                else if (action->at(0) == "add") {
-//                    cout << msg.getBody() << endl;
-//                }
+                else if (action->at(0) == "add"){}
+                else if (action->at(0) ==  "bookStatusReply") {}
                 else if (action->at(0) == "status") {
                     statusAction(msg, *action);
                 }
-//                else if (action->at(0) == "bookStatusReply") {
-//                    cout << "book status for " + msg.getDestination() + ":\n" + msg.getBody() << endl;
-//                }
+
+
                 action->clear();
-//            delete(&action);
+                //TODO: delete
             }
             else{
                 cout<<"i am trying to print but the action is null"<<endl;
             }
-        } else if (type == CONNECTED) {
-//            cout << client->getUserName() + " has connected successfully";
-        } else if (type == RECEIPT) {
+        }
+        else if (type == RECEIPT) {
             int id = dynamic_cast<ReceiptFrame *>(frame)->getId();
             if(client->getDisconnectReceipt() != id) {
                 if (!client->getReceiptById(id)) {
@@ -60,9 +56,6 @@ void StompProtocol::process(Frame* frame) {
                 cout << "logging out" << endl;
                 //TODO: DELETE CLIENT
             }
-//            cout << frame->toString() << endl;
-        } else if (type == ERROR) {
-//            cout << frame->toString() << endl;
         }
     }
 }
@@ -140,6 +133,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
             client->incrementReceiptId();
             client->incrementSubscriptionId();
         }
+
     }
     else if(type == "exit") {
         string topic = message.substr(5);
@@ -163,7 +157,8 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         SendFrame* sendFrame= new SendFrame(client, message);
         frame = sendFrame;
     }
-    frame->setType(OTHER);
+    if(frame != nullptr)
+        frame->setType(OTHER);
     return frame;
 }
 
@@ -171,7 +166,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
 vector<string>* StompProtocol::getAction(MessageFrame& frame) {
     vector<string> vec = buildVector(frame.getBody());
     auto* output = new vector<string>;
-    if(vec.at(0) == "returning"){    //0 = return, 1= book, 2= returning to
+    if(vec.at(0) == "Returning"){    //0 = return, 1= book, 2= returning to
         output->emplace_back("return");
         string book;
         for (int i = 1; i < vec.size() - 2; i++){
@@ -182,7 +177,7 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
         output->push_back(book);
         output->push_back(vec.at(vec.size()-1));
     }
-    else if(vec.at(0) == "taking") {  //0= take, 1= book, 2= taken from
+    else if(vec.at(0) == "Taking") {  //0= take, 1= book, 2= taken from
         output->emplace_back("take");
         string book;
         for (int i = 1; i < vec.size() - 2; i++){
@@ -231,22 +226,12 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
         output->push_back(book);
     }
     //replying to book status
-    else if (!vec.empty() && vec.at(0) == "book"){
-        output->emplace_back("bookStatusReply"); //0= bookStatusReply, 1= name, 2+= books
-        string msg = frame.getBody();
-        string word;
-        for(char c : msg){
-            if (c == ':' | c == ',' ){
-                output->push_back(word);
-                word = "";
-            }
-            else
-                word += c;
-        }
-        output->push_back(word);
+    else if (!vec.empty() && vec.at(0) == "Book"){
+        output->emplace_back("status"); //0= status, 1=topic
+        output->push_back(frame.getDestination());
     }
-    else{
-        return nullptr;
+    else if (!vec.empty()) { //0 == bookStatusReply
+        output->emplace_back("bookStatusReply");
     }
     return output;
 }
@@ -297,12 +282,13 @@ void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const
             if (requestedBook == book){
 //                cout << " THE OWNER IS "+ owner + " THE CLIENT IS " + client->getUserName() << endl;
                 string str;
-                remove(vec.begin(), vec.end(), requestedBook);
-                str.append("taking ").append(book).append(" from ").append(owner);
+                requestedBooks->erase(remove(requestedBooks->begin(), requestedBooks->end(), requestedBook));
+                str.append("Taking ").append(book).append(" from ").append(owner);
                 client->getBooksByGenre(topic)->push_back(new Book(topic, book, owner));
                 SendFrame sendFrame(str, topic);
                 string m = sendFrame.toString();
                 handler.sendLine(m);
+                break;
             }
         }
     }
@@ -317,7 +303,7 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     string str = client->getUserName() +":";
     for (Book* b: *client->getBooksByGenre(topic)){
         if (b->isAvailable()){
-            str.append(","+b->getBookName());
+            str.append(b->getBookName()+",");
         }
     }
     SendFrame sendFrame(str, topic);

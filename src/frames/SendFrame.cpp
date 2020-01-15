@@ -12,7 +12,7 @@ SendFrame::SendFrame(Client* client, string& str):destination(""), body("") {
     string genre = vec.at(1);
     destination = genre;
     if(type == "status") {
-        body = "book status";
+        body = "Book status";
     }
     else {
         string userName = client->getUserName();
@@ -59,7 +59,7 @@ void SendFrame::returnCommend(Client& client, string &genre, const string &bookN
             break;
         }
     }
-    body = "returning " + bookName + " to " + borrowedFrom;
+    body = "Returning " + bookName + " to " + borrowedFrom;
 }
 
 const string &SendFrame::getDestination() const {
