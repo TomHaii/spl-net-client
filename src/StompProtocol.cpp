@@ -252,7 +252,6 @@ vector<string> StompProtocol::buildVector(string& s) {
 }
 
 void StompProtocol::borrowAction(MessageFrame & msg, vector<string> &vec) const {
-//    cout<<msg.toString()<<endl;
     string topic = msg.getDestination();
     string book = vec.at(2);
     for (Book *b: *client->getBooksByGenre(topic)) {
@@ -269,16 +268,13 @@ void StompProtocol::borrowAction(MessageFrame & msg, vector<string> &vec) const 
 }
 
 void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const {
-//    cout<<msg.toString()<<endl;
     string owner = vec.at(1);
     string book = vec.at(2);
-//    cout<<"book name: "+book <<endl;
     string topic = msg.getDestination();
     vector<string> *requestedBooks = client->getRequestedBooks()->at(topic);
     for (auto & requestedBook : *requestedBooks) {
         {
             if (requestedBook == book){
-//                cout << " THE OWNER IS "+ owner + " THE CLIENT IS " + client->getUserName() << endl;
                 string str;
                 requestedBooks->erase(remove(requestedBooks->begin(), requestedBooks->end(), requestedBook));
                 str.append("Taking ").append(book).append(" from ").append(owner);
@@ -304,7 +300,7 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
             str.append(b->getBookName()+",");
         }
     }
-    SendFrame sendFrame(str, topic);
+    SendFrame sendFrame(str.substr(0, str.size()-1), topic);
     string m = sendFrame.toString();
     handler.sendLine(m);
 }
