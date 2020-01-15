@@ -13,6 +13,7 @@ void StompProtocol::process(Frame* frame) {
         FrameType type = frame->getType();
         if (type == MESSAGE) {
             MessageFrame msg = *dynamic_cast<MessageFrame *>(frame);
+            cout<<"****type of message\n"+msg.toString()<<endl;
             vector<string>* action = getAction(msg);
             if (action != nullptr) {
                 if (action->at(0) == "return") {
@@ -126,24 +127,32 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         }
     }
     else if(type == "join") {
-        frame = new SubscribeFrame(message, client->getSubscriptionId(), client->getReceiptId());
-        string topic = dynamic_cast<SubscribeFrame*>(frame)->getDestination();
+        string topic = message.substr(5);
         unordered_map<string, vector<Book*>*> *map = client->getBooksMap();
         if(map->count(topic)==0) {
+            frame = new SubscribeFrame(message, client->getSubscriptionId(), client->getReceiptId());
             client->getRequestedBooks()->insert(pair<string, vector<string> *>(topic, new vector<string>));
             vector<Book *> *vec = new vector<Book *>;
             map->insert(pair<string, vector<Book *> *>(topic, vec));
+            int id = dynamic_cast<SubscribeFrame *>(frame)->getReceipt();
+            client->getTopicsSubscriptionsById()->insert(pair<int, string>(client->getSubscriptionId(), topic));
+            client->getReceipts()->insert(pair<int, ReceiptFrame *>(id, nullptr));
+            client->incrementReceiptId();
+            client->incrementSubscriptionId();
         }
-        int id = dynamic_cast<SubscribeFrame*>(frame)->getReceipt();
-        client->getTopicsSubscriptionsById()->insert(pair<int, string>(client->getSubscriptionId(), topic));
-        client->getReceipts()->insert(pair<int,ReceiptFrame*>(id, nullptr));
-        client->incrementReceiptId();
-        client->incrementSubscriptionId();
     }
     else if(type == "exit") {
-        frame = new UnsubscribeFrame(message, client);
+        string topic = message.substr(5);
+        if(client->getBooksMap()->count(topic)>0)
+            frame = new UnsubscribeFrame(message, client);
+
     }
     else if(type == "logout") {
+        for(pair <string, vector<Book*>*> p : *client->getBooksMap()){
+            string msg = "exit " +p.first;
+            UnsubscribeFrame exitFrame (msg, client);
+            handler.sendLine(exitFrame.toString());
+        }
         int id = client->getReceiptId();
         client->setDisconnectReceipt(id);
         client->getReceipts()->insert(pair<int,bool>(id, false));
@@ -163,7 +172,6 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
     vector<string> vec = buildVector(frame.getBody());
     auto* output = new vector<string>;
     if(vec.at(0) == "returning"){    //0 = return, 1= book, 2= returning to
-        cout<<"trying to returnnnfddklsd"<<endl;
         output->emplace_back("return");
         string book;
         for (int i = 1; i < vec.size() - 2; i++){
