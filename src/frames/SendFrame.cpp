@@ -72,7 +72,7 @@ const string &SendFrame::getBody() const {
 
 string SendFrame::toString() {
     return "SEND\n"
-           "destination:"+destination+"\n"+
+           "destination:"+destination+"\n\n"+
            body+
            "\n";
 
