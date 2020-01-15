@@ -9,6 +9,7 @@ ServerListener::ServerListener(ConnectionHandler &_connectionHandler, StompProto
 }
 
 void ServerListener::shouldTerminate() {
+    connectionHandler.close();
     terminate = true;
 }
 
@@ -17,7 +18,7 @@ bool ServerListener::isTerminate() const {
 }
 
 void ServerListener::operator()() {
-    while(!stompProtocol.shouldTerminate()) {
+    while(!isTerminate()) {
         // We can use one of three options to read data from the server:
         // 1. Read a fixed number of characters
         // 2. Read a line (up to the newline character using the getline() buffered reader
@@ -27,9 +28,8 @@ void ServerListener::operator()() {
         // We could also use: connectionHandler.getline(answer) and then get the answer without the newline char at the end
 
         if (!connectionHandler.getLine(answer)) {
-            stompProtocol.markAsTerminated();
             std::cout << "Disconnected. Exiting...\n" << std::endl;
-            break;
+            shouldTerminate();
         }
         //TODO: DELETE ENCODERDECODER FROM THE CONSTRUCTOR
         Frame *frame = stompEncoderDecoder::decodeMessage(answer);
@@ -40,10 +40,9 @@ void ServerListener::operator()() {
             // we filled up to the \n char - we must make sure now that a 0 char is also present. So we truncate last character.
             answer.resize(len - 1);
             if (!answer.empty())
-                std::cout << "received from server: \n" + answer << std::endl << std::endl;
+                std::cout << "--received from server:-- \n" + answer << std::endl << std::endl;
             if (stompProtocol.shouldTerminate()) {
                 std::cout << "Exiting...\n" << std::endl;
-                break;
             }
         }
     }

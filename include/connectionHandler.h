@@ -34,7 +34,7 @@ public:
 	
 	// Send an ascii line from the server
     // Returns false in case connection closed before all the data is sent.
-    bool sendLine(std::basic_string<char> line);
+    bool sendLine(const std::basic_string<char>& line);
  
     // Get Ascii data from the server until the delimiter character
     // Returns false in case connection closed before null can be read.

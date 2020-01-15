@@ -23,6 +23,7 @@ int main (int argc, char *argv[]) {
 }
 
 void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
+
     ConnectFrame frame(inputLine);
     handler->sendLine(frame.toString());
     string res;
@@ -30,6 +31,7 @@ void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
     Frame* frame1 = stompEncoderDecoder::decodeMessage(res);
     cout <<"\n"+ frame1->toString() << endl;
     if (frame1->getType() == CONNECTED) {
+        cout << " MAKING LISTENERS ON MAIN " << endl;
         client = new Client(frame.getLogin());
         StompProtocol protocol(*handler, client);
         protocol.setConnected(true);
