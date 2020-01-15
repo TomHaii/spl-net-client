@@ -12,7 +12,7 @@ int DisconnectFrame::getReceiptId() const {
 string DisconnectFrame::toString() {
     return "DISCONNECT\n"
            "receipt:"+std::to_string(receiptId)+
-           "\n";
+           "\n\n";
 }
 
 DisconnectFrame::DisconnectFrame(int receiptId) : receiptId(receiptId) {}

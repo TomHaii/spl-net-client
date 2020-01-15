@@ -19,7 +19,7 @@ void UnsubscribeFrame::setId(int _id) {
 string UnsubscribeFrame::toString() {
     return "UNSUBSCRIBE\n"
            "id:"+to_string(id)+
-           "\n";
+           "\n\n";
 }
 
 UnsubscribeFrame::UnsubscribeFrame(string& str, Client * client):id(0) {

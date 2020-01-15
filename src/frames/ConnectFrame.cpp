@@ -37,5 +37,5 @@ string ConnectFrame::toString() {
            "host:"+host+"\n"+
            "login:"+login+"\n"+
            "passcode:"+passcode+
-           "\n";
+           "\n\n";
 }
