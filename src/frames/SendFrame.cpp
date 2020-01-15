@@ -80,3 +80,9 @@ string SendFrame::toString() {
 
 SendFrame::SendFrame(string msg, string dest): body(std::move(msg)), destination(std::move(dest)){}
 
+SendFrame::~SendFrame() {
+    destination.clear();
+    body.clear();
+
+}
+

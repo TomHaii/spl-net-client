@@ -16,6 +16,8 @@ private:
     string destination;
     int id;
 public:
+    ~UnsubscribeFrame() override = default;
+
     UnsubscribeFrame(string& str, Client*);
 
     int getId();

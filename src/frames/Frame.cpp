@@ -23,5 +23,3 @@ vector<string> Frame::buildVector(string & s) {
         vec.push_back(word);
     return vec;
 }
-
-Frame::~Frame() = default;

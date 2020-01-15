@@ -30,3 +30,11 @@ string ConnectFrame::toString() {
            "passcode:"+passcode+
            "\n\n";
 }
+
+ConnectFrame::~ConnectFrame() {
+    acceptVersion.clear();
+    host.clear();
+    login.clear();
+    acceptVersion.clear();
+
+}

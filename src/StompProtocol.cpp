@@ -122,8 +122,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         if(map->count(topic)==0) {
             frame = new SubscribeFrame(message, client->getSubscriptionId(), client->getReceiptId());
             client->getRequestedBooks()->insert(pair<string, vector<string> *>(topic, new vector<string>));
-            vector<Book *> *vec = new vector<Book *>;
-            map->insert(pair<string, vector<Book *> *>(topic, vec));
+            map->insert(pair<string, vector<Book *> *>(topic,  new vector<Book *>));
             int id = dynamic_cast<SubscribeFrame *>(frame)->getReceipt();
             client->getTopicsSubscriptionsById()->insert(pair<int, string>(client->getSubscriptionId(), topic));
             client->getReceipts()->insert(pair<int, ReceiptFrame *>(id, nullptr));

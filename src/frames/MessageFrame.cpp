@@ -28,3 +28,9 @@ MessageFrame::MessageFrame(vector<string>& msg)
 string MessageFrame::toString() {
     return body;
 }
+
+MessageFrame::~MessageFrame() {
+    destination.clear();
+    body.clear();
+
+}

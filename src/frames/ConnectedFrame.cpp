@@ -18,4 +18,9 @@ string ConnectedFrame::toString() {
            "version:" + version;
 }
 
+ConnectedFrame::~ConnectedFrame() {
+    version.clear();
+
+}
+
 

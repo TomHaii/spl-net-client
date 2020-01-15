@@ -15,6 +15,7 @@ private:
     string body;
 
 public:
+    ~ErrorFrame();
     ErrorFrame(vector<string>&);
 
     int getReceiptId() const;

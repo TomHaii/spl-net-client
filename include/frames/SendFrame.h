@@ -19,6 +19,8 @@ private:
     string destination;
     string body;
 public:
+    ~SendFrame();
+
     SendFrame(Client*, string&);
 
     SendFrame(string, string);

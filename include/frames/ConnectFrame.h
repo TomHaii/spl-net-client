@@ -18,6 +18,7 @@ private:
     string passcode;
 
 public:
+    ~ConnectFrame() override;
     const string &getLogin() const;
     explicit ConnectFrame(string&);
     string toString() override;

@@ -28,3 +28,8 @@ ErrorFrame::ErrorFrame(vector<string> &vec) {
 string ErrorFrame::toString() {
     return "Error: "+body;
 }
+
+ErrorFrame::~ErrorFrame() {
+    body.clear();
+
+}

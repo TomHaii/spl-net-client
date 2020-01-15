@@ -13,7 +13,9 @@ private:
     string destination;
     string body;
 public:
-    MessageFrame(vector<string>&);
+    ~MessageFrame();
+
+    explicit MessageFrame(vector<string>&);
 
     const string &getDestination() const;
 

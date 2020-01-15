@@ -14,6 +14,8 @@ private:
     int id;
     int receipt;
 public:
+    ~SubscribeFrame() override = default;
+
     const string &getDestination() const;
 
     int getId();

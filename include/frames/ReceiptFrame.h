@@ -15,6 +15,8 @@ public:
     int getId() const;
 
 public:
+    ~ReceiptFrame() override = default;
+
     ReceiptFrame(int _id);
     ReceiptFrame(vector<string>&);
     string toString() override;
