@@ -71,7 +71,6 @@ void login(ConnectionHandler *&handler, string &inputLine) {
             } else
                 break;
         }
-
         cout << "Sending new connect frame.. " << endl;
         short port = (short) stoi(tmpPort);
         handler = new ConnectionHandler(host, port);
