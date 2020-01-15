@@ -109,6 +109,18 @@ void Client::setDisconnectReceipt(int _disconnectReceipt) {
 }
 
 Client::~Client() {
-    for
-
+    for (pair<string, vector<Book *> *> p : *booksMap) {
+        p.second->clear(); //TODO: maybe we need to manually delete
+    }
+    booksMap->clear();
+    delete (booksMap);
+    for (pair<string, vector<string> *> p : *requestedBooks) {
+        p.second->clear();
+    }
+    requestedBooks->clear();
+    delete(requestedBooks);
+    topicsSubscriptionsById->clear();
+    delete(topicsSubscriptionsById);
+    receipts->clear();
+    delete(receipts);
 }

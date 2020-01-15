@@ -15,21 +15,12 @@ ConnectFrame::ConnectFrame(string & str) {
 
 }
 
-const string &ConnectFrame::getAcceptVersion() const {
-    return acceptVersion;
-}
-
-const string &ConnectFrame::getHost() const {
-    return host;
-}
 
 const string &ConnectFrame::getLogin() const {
     return login;
 }
 
-const string &ConnectFrame::getPasscode() const {
-    return passcode;
-}
+
 
 string ConnectFrame::toString() {
     return "CONNECT\n"

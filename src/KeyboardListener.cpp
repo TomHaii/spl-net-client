@@ -37,8 +37,6 @@ void KeyboardListener::operator()() {
             // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
             std::cout << "Sent " << len + 1 << " bytes to server" << std::endl;
         }
-        else
-            cout<<"hi im null"<<endl;
-        //TODO: delete frame
+        delete(frame);
     }
 }

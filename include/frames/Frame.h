@@ -21,7 +21,7 @@ private:
 protected:
     static vector<string> buildVector(string&);
 public:
-
+    ~Frame();
     virtual string toString() = 0;
 
     void setType(FrameType _type){

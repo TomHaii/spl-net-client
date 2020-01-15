@@ -30,7 +30,7 @@ void StompProtocol::process(Frame* frame) {
                 }
 
                 action->clear();
-                //TODO: delete
+                delete(action);
             }
             else{
                 cout<<"i am trying to print but the action is null"<<endl;
@@ -51,7 +51,7 @@ void StompProtocol::process(Frame* frame) {
                 connected=false;
                 markAsTerminated();
                 cout << "logging out" << endl;
-                //TODO: DELETE CLIENT
+                delete(client);
             }
         }
     }
@@ -235,7 +235,6 @@ vector<string>* StompProtocol::getAction(MessageFrame& frame) {
 }
 
 vector<string> StompProtocol::buildVector(string& s) {
-
     string word;
     vector<string> vec;
     for (char c : s){
