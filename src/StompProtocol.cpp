@@ -8,6 +8,9 @@
 #include <connectionHandler.h>
 #include "StompProtocol.h"
 
+StompProtocol::StompProtocol(ConnectionHandler & _handler, Client& cl): handler(_handler), client(cl) {}
+
+
 void StompProtocol::process(Frame* frame) {
     if(frame != nullptr) {
         FrameType type = frame->getType();
@@ -29,7 +32,7 @@ void StompProtocol::receiptFrameCase(Frame *frame) {
         if (!client.getReceiptById(id)) {
             client.getReceipts()->at(id) = true;
         } else {
-            string topic = this->client.getTopicsSubscriptionsById()->at(id);
+            string topic = client.getTopicsSubscriptionsById()->at(id);
             client.getReceipts()->erase(id);
             client.getBooksMap()->erase(topic);
         }
@@ -63,7 +66,7 @@ void StompProtocol::messageFrameCase(Frame *frame) const {
 
 //this is a reaction function to the "returning book to ___" message
 void StompProtocol::returnAction(MessageFrame &msg,
-                                 vector<string> &action) const{
+                                 vector<string> &action) const {
     string book = action.at(1);
     if (action.at(2) == client.getUserName()) {
         if(client.getBooksMap()->count(msg.getDestination())>0) {
@@ -115,7 +118,6 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         frame = logoutCommend(message,frame);    }
     else {
         frame = new SendFrame(client, message);
-//        string topic = dynamic_cast<SendFrame *>(frame)->getDestination();
     }
     if(frame != nullptr)
         frame->setType(OTHER);
@@ -124,7 +126,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
 
 
 //builds a new frame to the join commend from keyboard
-Frame *StompProtocol::joinCommend(string &message, Frame *frame) const {
+Frame *StompProtocol::joinCommend(string &message, Frame *frame)  const{
     string topic = message.substr(5);
     unordered_map<string, vector<Book>> *map = this->client.getBooksMap();
     if(map->count(topic)==0) {
@@ -234,7 +236,7 @@ void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const
                     requestedBooks.erase(remove(requestedBooks.begin(), requestedBooks.end(), requestedBook), requestedBooks.end());
                     str.append("Taking ").append(book).append(" from ").append(owner);
                     Book b(topic, book, owner);
-                    client.getBooksByGenre(topic).push_back(b);
+                    client.addBook(b);
                     SendFrame sendFrame(str, topic);
                     string m = sendFrame.toString();
                     handler.sendLine(m);
@@ -266,7 +268,6 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     handler.sendLine(m);
 }
 
-StompProtocol::StompProtocol(ConnectionHandler & _handler, Client& cl): handler(_handler), client(cl) {}
 
 bool StompProtocol::shouldTerminate() {
     return terminate;

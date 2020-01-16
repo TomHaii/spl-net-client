@@ -1,11 +1,11 @@
 
 #ifndef BOOST_ECHO_CLIENT_CLIENT_H
 #define BOOST_ECHO_CLIENT_CLIENT_H
-
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <frames/ReceiptFrame.h>
+#include <mutex>
 
 
 #include "Book.h"
@@ -23,10 +23,18 @@ private:
     int disconnectReceipt = -1;
     unordered_map<int, bool> *receipts;
 
+    mutex booksMap_lock;
+    mutex requested_lock;
+    mutex topics_lock;
+    mutex receipts_lock;
+
+
 
 public:
     Client();
     virtual ~Client();
+    Client(const Client&);
+    Client& operator = (const Client &t);
     unordered_map<int, string> *getTopicsSubscriptionsById();
     unordered_map<string, vector<string>> *getRequestedBooks();
     unordered_map<string, vector<Book>> *getBooksMap() const;

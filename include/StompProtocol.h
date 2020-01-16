@@ -12,17 +12,23 @@
 #include "frames/DisconnectFrame.h"
 #include "frames/UnsubscribeFrame.h"
 #include "Client.h"
+#include <mutex>
+
 
 class Client;
 class Frame;
 class MessageFrame;
 class ConnectionHandler;
 
+using namespace std;
+
 class StompProtocol {
 private:
     ConnectionHandler& handler;
     Client& client;
     bool terminate = false;
+
+
     static vector<string> buildVector(string& s);
     static vector<string> getAction(MessageFrame &frame, vector<string>&);
     void takeAction(MessageFrame &msg, vector<string> &action) const;
@@ -44,17 +50,13 @@ private:
 
 
 
-
 public:
     void markAsTerminated();
     bool shouldTerminate();
     StompProtocol(ConnectionHandler&, Client&);
     ~StompProtocol()= default;
     void process(Frame *);
-
-
     Frame *buildFrame(std::string &message);
 };
-
 
 #endif //BOOST_ECHO_CLIENT_STOMPPROTOCOL_H
