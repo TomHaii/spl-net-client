@@ -37,11 +37,20 @@ string SendFrame::getBookName(vector<string> &vec) const {
 
 void SendFrame::addCommend(Client& client, string &genre, string &userName, string &bookName) {
     Book book(genre, bookName, userName);
-    if(client.getBooksMap()->count(genre)==0){
+    if(client.getBooksMap()->count(genre) == 0) {
         vector<Book> vec;
+        vector<string> vec2;
         client.getBooksMap()->insert(pair<string, vector<Book>>(genre, vec));
+        client.getRequestedBooks()->insert(pair<string, vector<string>>(genre, vec2));
     }
-    client.addBook(book);
+    bool exists = false;
+    for (Book &b: client.getBooksByGenre(genre)) {
+        if (b.getBookName() == bookName) {
+            exists = true;
+        }
+    }
+    if(!exists)
+        client.addBook(book);
     body = userName + " has added the book " + book.getBookName();
 }
 
@@ -74,5 +83,9 @@ SendFrame::SendFrame(string msg, string dest): body(std::move(msg)), destination
 SendFrame::~SendFrame() {
     destination.clear();
     body.clear();
+}
+
+const string &SendFrame::getDestination() const {
+    return destination;
 }
 

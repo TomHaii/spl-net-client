@@ -15,6 +15,7 @@ private:
     string destination;
     string body;
 public:
+    const string &getDestination() const;
     ~SendFrame() override ;
     SendFrame(Client&, string&);
     SendFrame(string, string);

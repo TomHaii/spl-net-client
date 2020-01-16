@@ -116,6 +116,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
         frame = logoutCommend(message,frame);    }
     else {
         frame = new SendFrame(client, message);
+//        string topic = dynamic_cast<SendFrame *>(frame)->getDestination();
     }
     if(frame != nullptr)
         frame->setType(OTHER);
@@ -162,7 +163,6 @@ vector<string> StompProtocol::getAction(MessageFrame& frame, vector<string>& out
     }
     else if (vec.size() > 1 && vec.at(1) == "has" && vec.at(2) == "added"){ //0= add, 1= name, 2= book
         buildAddBookVector(output,vec);
-
     }
     //replying to book status
     else if (!vec.empty() && vec.at(0) == "Book"){
