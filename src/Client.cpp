@@ -7,12 +7,8 @@
 #include <utility>
 #include <iostream>
 
-unordered_map<string, vector<Book*> *> *Client::getBooksMap() const {
+unordered_map<string, vector<Book> *> *Client::getBooksMap() const {
     return booksMap;
-}
-
-void Client::setBooksMap(unordered_map<string, vector<Book*> *> *booksMap) {
-    Client::booksMap = booksMap;
 }
 
 
@@ -24,16 +20,8 @@ int Client::getSubscriptionId() const {
     return subscriptionId;
 }
 
-void Client::setSubscriptionId(int subscriptionId) {
-    Client::subscriptionId = subscriptionId;
-}
-
 int Client::getReceiptId() const {
     return receiptId;
-}
-
-void Client::setReceiptId(int receiptId) {
-    Client::receiptId = receiptId;
 }
 
 void Client::incrementReceiptId() {
@@ -47,18 +35,18 @@ void Client::incrementSubscriptionId() {
 }
 
 
-Client::Client(): booksMap(new unordered_map<string,vector<Book*>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
+Client::Client(): booksMap(new unordered_map<string,vector<Book>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
 
-vector<Book*> *Client::getBooksByGenre(string topic){
+vector<Book> *Client::getBooksByGenre(string topic){
     if (booksMap->count(topic)==0)
         return nullptr;
     return booksMap->at(topic);
 }
 
-void Client::addBook(Book* book) {
-    string topic = book->getGenre();
+void Client::addBook(const Book& book) {
+    string topic = book.getGenre();
     if(booksMap->count(topic) == 0) {
-        booksMap->insert(pair<string, vector<Book *> *>(topic, new vector<Book *>));
+        booksMap->insert(pair<string, vector<Book> *>(topic, new vector<Book>));
         requestedBooks->insert(pair<string, vector<string>*>(topic, new vector<string>));
     }
     booksMap->at(topic)->push_back(book);
@@ -66,10 +54,6 @@ void Client::addBook(Book* book) {
 
 const string &Client::getUserName() const {
     return name;
-}
-
-void Client::addReceiptFrame(int id, ReceiptFrame *frame) {
-    receipts->at(id) = frame;
 }
 
 bool Client::getReceiptById(int id) {
@@ -89,8 +73,6 @@ unordered_map<string, vector<string> *> *Client::getRequestedBooks()  {
     return requestedBooks;
 }
 
-Client::Client(string _name): booksMap(new unordered_map<string,vector<Book*>*>), name(std::move(_name)), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
-
 int Client::getSubscriptionIdByTopic(string& topic) {
     for(pair<int,string> p: *topicsSubscriptionsById){
         cout << p.second << endl;
@@ -109,15 +91,12 @@ void Client::setDisconnectReceipt(int _disconnectReceipt) {
 }
 
 Client::~Client() {
-    for (pair<string, vector<Book *> *> p : *booksMap) {
-        p.second->clear(); //TODO: maybe we need to manually delete
-    }
     booksMap->clear();
-    delete (booksMap);
-    for (pair<string, vector<string> *> p : *requestedBooks) {
-        p.second->clear();
-    }
+    delete(booksMap);
     requestedBooks->clear();
+    delete(requestedBooks);
     topicsSubscriptionsById->clear();
+    delete(topicsSubscriptionsById);
     receipts->clear();
+    delete(receipts);
 }

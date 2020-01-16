@@ -20,22 +20,11 @@ private:
     string body;
 public:
     ~SendFrame() override ;
-
-    SendFrame(Client*, string&);
-
+    SendFrame(Client&, string&);
     SendFrame(string, string);
-
-    const string &getDestination() const;
-
-    const string &getBody() const;
-
     void returnCommend(Client& client, string &genre, const string &bookName);
-
     void addCommend(Client& client, string &genre, string &userName, string &bookName);
-
     string getBookName(vector<string> &vec) const;
-
-
     string toString() override;
 };
 

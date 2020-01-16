@@ -19,6 +19,8 @@ Frame *stompEncoderDecoder::decodeMessage(string &msg) {
         } else
             word += c;
     }
+    if (!word.empty())
+        vec.push_back(word);
     if (!vec.empty()) {
         string type = vec.at(0);
         if (type == "CONNECTED") {

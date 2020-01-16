@@ -12,13 +12,10 @@ class ReceiptFrame: public Frame {
 private:
     int id;
 public:
-    int getId() const;
-
-public:
-    ~ReceiptFrame() override = default;
-
     explicit ReceiptFrame(int _id);
     explicit ReceiptFrame(vector<string>&);
+    ~ReceiptFrame() override = default;
+    int getId() const;
     string toString() override;
 };
 

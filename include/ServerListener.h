@@ -10,14 +10,10 @@
 #include "StompProtocol.h"
 #include "stompEncoderDecoder.h"
 #include "connectionHandler.h"
-
-class connectionHandler;
-class stompProtocol;
-class stompEncoderDecoder;
-
-
 using namespace std;
+
 class ServerListener {
+
 private:
     StompProtocol stompProtocol;
     ConnectionHandler& connectionHandler;
@@ -25,9 +21,6 @@ private:
 public:
     ServerListener(ConnectionHandler& _connectionHandler, StompProtocol& _stompProtocol);
     void operator()();
-    void shouldTerminate();
-
-    bool isTerminate() const;
 };
 
 

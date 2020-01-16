@@ -14,21 +14,14 @@ private:
     string bookName;
     string owner;bool available;
 public:
-    bool isAvailable() const;
-
-public:
     Book(string&, string&, string&);
+    bool isAvailable() const;
     const string &getBookName() const;
-
     const string &getOwner() const;
-
     const string &getGenre() const;
-
     void free();
-
     void acquire();
 
-    void setOwner(string &name);
 };
 
 

@@ -6,36 +6,35 @@
 #include "../include/connectionHandler.h"
 
 
-void login(ConnectionHandler *&handler, string &inputLine);
+void login(ConnectionHandler &handler, string &inputLine);
 
-void connect(ConnectionHandler *handler, Client *client, string &inputLine);
+void connect(ConnectionHandler &handler, Client &client, string &inputLine);
 
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
 */
 int main (int argc, char *argv[]) {
-    ConnectionHandler *handler;
-    Client *client = nullptr;
+    ConnectionHandler handler;
+    Client client;
     string inputLine;
     login(handler, inputLine);
     connect(handler, client, inputLine);
     return 0;
 }
 
-void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
-
+void connect(ConnectionHandler &handler, Client &client, string &inputLine) {
     ConnectFrame frame(inputLine);
-    handler->sendLine(frame.toString());
+    handler.sendLine(frame.toString());
     string res;
-    handler->getLine(res);
+    handler.getLine(res);
     Frame* frame1 = stompEncoderDecoder::decodeMessage(res);
     cout <<"\n"+ frame1->toString() << endl;
     if (frame1->getType() == CONNECTED) {
-        client = new Client(frame.getLogin());
+        client.setName(frame.getLogin());
         StompProtocol protocol(handler, client);
         protocol.setConnected(true);
-        KeyboardListener keyboardListener(*handler, protocol);
-        ServerListener serverListener(*handler,
+        KeyboardListener keyboardListener(handler, protocol);
+        ServerListener serverListener(handler,
                                       protocol);
         thread th1(ref(keyboardListener));
         thread th2(ref(serverListener));
@@ -46,7 +45,7 @@ void connect(ConnectionHandler *handler, Client *client, string &inputLine) {
 
 }
 
-void login(ConnectionHandler *&handler, string &inputLine) {
+void login(ConnectionHandler &handler, string &inputLine) {
     while (1) {
         cout << "please enter login info ";
         const short bufsize = 1024;
@@ -70,8 +69,9 @@ void login(ConnectionHandler *&handler, string &inputLine) {
         }
         cout << "Sending new connect frame.. " << endl;
         short port = (short) stoi(tmpPort);
-        handler = new ConnectionHandler(host, port);
-        if (!handler->connect()) {
+        handler.setHost(host);
+        handler.setPort(port);
+        if (!handler.connect()) {
             cerr << "Cannot connect to " << host << ":" << port << endl;
             cout << "Trying again.." << endl;
         } else {

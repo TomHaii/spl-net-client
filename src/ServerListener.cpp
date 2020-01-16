@@ -8,15 +8,6 @@
 ServerListener::ServerListener(ConnectionHandler &_connectionHandler, StompProtocol &_stompProtocol):connectionHandler(_connectionHandler), stompProtocol(_stompProtocol), terminate(false) {
 }
 
-void ServerListener::shouldTerminate() {
-    connectionHandler.close();
-    terminate = true;
-}
-
-bool ServerListener::isTerminate() const {
-    return terminate;
-}
-
 void ServerListener::operator()() {
         while (!stompProtocol.shouldTerminate()) {
             // We can use one of three options to read data from the server:

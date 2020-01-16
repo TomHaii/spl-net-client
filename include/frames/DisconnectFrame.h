@@ -13,9 +13,7 @@ private:
     int receiptId;
 public:
     ~DisconnectFrame() override = default;
-
     explicit DisconnectFrame(int receiptId);
-    int getReceiptId() const;
     string toString() override;
 
 };

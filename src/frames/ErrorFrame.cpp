@@ -4,14 +4,6 @@
 
 #include "frames/ErrorFrame.h"
 
-int ErrorFrame::getReceiptId() const {
-    return receiptId;
-}
-
-const string &ErrorFrame::getBody() const {
-    return body;
-}
-
 ErrorFrame::ErrorFrame(vector<string> &vec) {
     for (string &word: vec) {
         if (word.find("receipt-id") != string::npos) {

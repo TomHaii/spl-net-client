@@ -5,15 +5,6 @@
 #include "KeyboardListener.h"
 
 
-
-bool KeyboardListener::isTerminate() const {
-    return terminate;
-}
-
-void KeyboardListener::shouldTerminate() {
-    terminate = true;
-}
-
 KeyboardListener::KeyboardListener(ConnectionHandler &_handler, StompProtocol &_stompProtocol):handler(_handler), stompProtocol(_stompProtocol),terminate(false) {
 
 }

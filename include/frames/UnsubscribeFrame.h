@@ -17,13 +17,7 @@ private:
     int id;
 public:
     ~UnsubscribeFrame() override = default;
-
-    UnsubscribeFrame(string& str, Client*);
-
-    int getId();
-    void setId(int receipt);
-
-
+    UnsubscribeFrame(string& str, Client&);
     string toString() override;
 };
 

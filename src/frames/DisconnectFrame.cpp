@@ -4,10 +4,6 @@
 
 #include "frames/DisconnectFrame.h"
 
-int DisconnectFrame::getReceiptId() const {
-    return receiptId;
-}
-
 
 string DisconnectFrame::toString() {
     return "DISCONNECT\n"
