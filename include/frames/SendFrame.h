@@ -13,6 +13,7 @@ using namespace std;
 class SendFrame: public Frame {
 private:
     string destination;
+
     string body;
 public:
     const string &getDestination() const;

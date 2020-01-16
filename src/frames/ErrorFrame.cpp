@@ -1,6 +1,6 @@
 #include "frames/ErrorFrame.h"
 
-ErrorFrame::ErrorFrame(vector<string> &vec, string& s) {
+ErrorFrame::ErrorFrame(vector<string> &vec, string& s):body("") {
     for (string &word: vec) {
         if (word.find("receipt-id") != string::npos) {
             int split = word.find(':');

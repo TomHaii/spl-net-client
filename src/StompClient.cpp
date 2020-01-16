@@ -73,7 +73,7 @@ void login(ConnectionHandler &handler, string &inputLine) {
 
 void parseLoginInfo(string &inputLine, string &tmpPort, string &host){
     bool dots = false;
-    for (int i = 6; i < inputLine.size(); i++) {
+    for (unsigned int i = 6; i < inputLine.size(); i++) {
         char c = inputLine.at(i);
         if (c == ':')
             dots = true;

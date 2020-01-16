@@ -10,6 +10,7 @@ private:
     string body;
 
 public:
+    ErrorFrame():body("") {}
     ~ErrorFrame() override ;
     ErrorFrame(vector<string>&, string&);
     string toString() override;

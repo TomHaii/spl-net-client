@@ -20,8 +20,8 @@ class ConnectionHandler;
 
 class StompProtocol {
 private:
-    Client& client;
     ConnectionHandler& handler;
+    Client& client;
     bool terminate = false;
     static vector<string> buildVector(string& s);
     static vector<string> getAction(MessageFrame &frame, vector<string>&);

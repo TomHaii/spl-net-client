@@ -16,7 +16,6 @@ void StompProtocol::process(Frame* frame) {
         }
         else if (type == RECEIPT) {
             receiptFrameCase(frame);
-            int id = dynamic_cast<ReceiptFrame *>(frame)->getId();
         }
         else if (type == ERROR){
             markAsTerminated();
@@ -178,7 +177,7 @@ vector<string> StompProtocol::getAction(MessageFrame& frame, vector<string>& out
 void StompProtocol::buildReturnVector(vector<string> &output, vector<string> &vec) {
     output.emplace_back("return");
     string book;
-    for (int i = 1; i < vec.size() - 2; i++){
+    for (unsigned int i = 1; i < vec.size() - 2; i++){
         string s = vec.at(i);
         book.append(" "+s);
     }
@@ -316,7 +315,7 @@ Frame *StompProtocol::loginCommend(string &message, Frame *frame) const {
 void StompProtocol::buildTakeVector(vector<string> &output, vector<string> &vec) {
     output.emplace_back("take");
     string book;
-    for (int i = 1; i < vec.size() - 2; i++){
+    for (unsigned int i = 1; i < vec.size() - 2; i++){
         string s = vec.at(i);
         book.append(" "+s);
     }
@@ -330,7 +329,7 @@ void StompProtocol::buildBorrowVector(vector<string> &output, vector<string> &ve
     output.emplace_back("borrow");
     output.push_back(vec.at(0));
     string book;
-    for (int i = 4; i < vec.size(); i++){
+    for (unsigned int i = 4; i < vec.size(); i++){
         string s = vec.at(i);
         book.append(" "+s);
     }
@@ -342,7 +341,7 @@ void StompProtocol::buildHasBookVector(vector<string> &output, vector<string> &v
     output.emplace_back("hasBook");
     output.push_back(vec.at(0));
     string book;
-    for (int i = 2; i < vec.size(); i++){
+    for (unsigned int i = 2; i < vec.size(); i++){
         string s = vec.at(i);
         book.append(" "+s);
     }
@@ -354,7 +353,7 @@ void StompProtocol::buildAddBookVector(vector<string> &output, vector<string> &v
     output.emplace_back("add");
     output.push_back(vec.at(0));
     string book;
-    for (int i = 5; i < vec.size(); i++){
+    for (unsigned int i = 5; i < vec.size(); i++){
         string s = vec.at(i);
         book.append(" "+s);
     }

@@ -10,8 +10,8 @@ using namespace std;
 class ServerListener {
 
 private:
-    StompProtocol stompProtocol;
     ConnectionHandler& connectionHandler;
+    StompProtocol stompProtocol;
     bool terminate;
 public:
     ServerListener(ConnectionHandler& _connectionHandler, StompProtocol& _stompProtocol);

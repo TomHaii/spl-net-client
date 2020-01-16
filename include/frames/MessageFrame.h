@@ -11,6 +11,7 @@ private:
     string destination;
     string body;
 public:
+    MessageFrame():destination(""), body("") {}
     ~MessageFrame() override;
     explicit MessageFrame(vector<string>&);
     const string &getDestination() const;

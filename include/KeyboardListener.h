@@ -10,8 +10,8 @@ using namespace std;
 class KeyboardListener {
 
 private:
-    StompProtocol& stompProtocol;
     ConnectionHandler& handler;
+    StompProtocol& stompProtocol;
     bool terminate;
 public:
     KeyboardListener(ConnectionHandler& _handler, StompProtocol& _stompProtocol);

@@ -8,6 +8,7 @@ class DisconnectFrame: public Frame {
 private:
     int receiptId;
 public:
+    DisconnectFrame():receiptId(0) {}
     ~DisconnectFrame() override = default;
     explicit DisconnectFrame(int receiptId);
     string toString() override;

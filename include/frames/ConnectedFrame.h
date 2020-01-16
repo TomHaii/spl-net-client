@@ -9,6 +9,7 @@ class ConnectedFrame: public Frame{
 private:
     string version;
 public:
+    ConnectedFrame():version("") {}
     ~ConnectedFrame() override;
     explicit ConnectedFrame(vector<string>&);
     string toString() override;

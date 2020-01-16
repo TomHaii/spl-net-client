@@ -17,6 +17,7 @@ private:
 protected:
     static vector<string> buildVector(string&);
 public:
+    Frame();
     virtual ~Frame() = default;
     virtual string toString() = 0;
 

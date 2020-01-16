@@ -1,7 +1,7 @@
 #include <frames/ConnectFrame.h>
 #include <vector>
 
-ConnectFrame::ConnectFrame(string & str) {
+ConnectFrame::ConnectFrame(string & str):acceptVersion(""), host(""), login(""), passcode("") {
     vector<string> vec = buildVector(str);
     acceptVersion = "1.2";
     host = vec.at(1);
@@ -24,6 +24,10 @@ string ConnectFrame::toString() {
            "login:"+login+"\n"+
            "passcode:"+passcode+
            "\n\n";
+}
+
+ConnectFrame::ConnectFrame():acceptVersion(""), host(""), login(""), passcode("") {
+
 }
 
 
