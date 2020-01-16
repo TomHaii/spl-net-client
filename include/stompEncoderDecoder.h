@@ -14,9 +14,10 @@ using namespace std;
 
 class stompEncoderDecoder{
 private:
-
 public:
     static Frame* decodeMessage(string& msg);
+
+    static void buildVector(string &msg, vector<string> &vec);
 };
 
 

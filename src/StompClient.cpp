@@ -2,7 +2,6 @@
 #include <KeyboardListener.h>
 #include <ServerListener.h>
 
-
 void login(ConnectionHandler &handler, string &inputLine);
 
 void connect(ConnectionHandler &handler, Client &client, string &inputLine);
@@ -10,7 +9,6 @@ void connect(ConnectionHandler &handler, Client &client, string &inputLine);
 void connectedSuccessfully(ConnectionHandler &handler, Client &client, const ConnectFrame &frame);
 
 void parseLoginInfo(string &inputLine, string &tmpPort, string &host);
-
 
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)

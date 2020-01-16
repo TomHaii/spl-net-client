@@ -30,16 +30,30 @@ private:
     void borrowAction(MessageFrame&, vector<string>&) const;
     void hasBookAction(MessageFrame&, vector<string>&) const;
     void statusAction(MessageFrame &, vector<string> &) const;
+    void messageFrameCase(Frame *frame) const;
+    void receiptFrameCase(Frame *frame) ;
+    static void getActionType(string& s, string &message);
+    Frame *loginCommend(string &message, Frame *frame) const;
+    Frame *joinCommend(string &message, Frame *frame) const;
+    Frame *logoutCommend(string &message, Frame *frame) const;
+    static void buildReturnVector(vector<string> &output, vector<string> &vec);
+    static void buildTakeVector(vector<string> &output, vector<string> &vec);
+    static void buildBorrowVector(vector<string> &output, vector<string> &vec);
+    static void buildHasBookVector(vector<string> &output, vector<string> &vec);
+    static void buildAddBookVector(vector<string> &output, vector<string> &vec);
+
+
+
 
 public:
-    void setConnected(bool connected);
     void markAsTerminated();
     bool shouldTerminate();
     StompProtocol(ConnectionHandler&, Client&);
-    ~StompProtocol();
+    ~StompProtocol()= default;
     void process(Frame *);
-    Frame *buildFrame(std::string &message);
 
+
+    Frame *buildFrame(std::string &message);
 };
 
 

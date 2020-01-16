@@ -29,7 +29,6 @@ void Client::incrementSubscriptionId() {
 
 }
 
-
 Client::Client(): booksMap(new unordered_map<string,vector<Book>>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>>) {}
 
 vector<Book>& Client::getBooksByGenre(const string& topic){

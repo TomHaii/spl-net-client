@@ -1,21 +1,8 @@
 #include <stompEncoderDecoder.h>
 #include <frames/ErrorFrame.h>
-
-
 Frame *stompEncoderDecoder::decodeMessage(string &msg) {
     vector<string> vec;
-    string word;
-    for (char c: msg) {
-        if (c == '\n') {
-            if (!word.empty()) {
-                vec.push_back(word);
-                word = "";
-            }
-        } else
-            word += c;
-    }
-    if (!word.empty())
-        vec.push_back(word);
+    buildVector(msg,vec);
     if (!vec.empty()) {
         string type = vec.at(0);
         if (type == "CONNECTED") {
@@ -37,4 +24,19 @@ Frame *stompEncoderDecoder::decodeMessage(string &msg) {
         }
     }
     return nullptr;
+}
+
+void stompEncoderDecoder::buildVector(string& msg, vector<string>& vec){
+    string word;
+    for (char c: msg) {
+        if (c == '\n') {
+            if (!word.empty()) {
+                vec.push_back(word);
+                word = "";
+            }
+        } else
+            word += c;
+    }
+    if (!word.empty())
+        vec.push_back(word);
 }
