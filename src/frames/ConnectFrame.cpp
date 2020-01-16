@@ -1,10 +1,5 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
 #include <frames/ConnectFrame.h>
 #include <vector>
-#include <iostream>
 
 ConnectFrame::ConnectFrame(string & str) {
     vector<string> vec = buildVector(str);

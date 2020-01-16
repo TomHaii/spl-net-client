@@ -23,6 +23,7 @@ void KeyboardListener::operator()() {
             //send full message
             if (!handler.sendLine(frameMessage)) {
                 stompProtocol.markAsTerminated();
+                delete(frame);
                 break;
             }
             // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.

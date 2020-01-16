@@ -1,7 +1,3 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
 #include "frames/SendFrame.h"
 #include <iostream>
 #include <utility>
@@ -20,7 +16,7 @@ SendFrame::SendFrame(Client& client, string& str):destination(""), body("") {
         if (type == "add") {
             addCommend(client, genre, userName, bookName);
         } else if (type == "borrow") {
-            client.getRequestedBooks()->at(destination)->push_back(bookName);
+            client.getRequestedBooks()->at(destination).push_back(bookName);
             body = userName + " wish to borrow " + bookName;
         } else if (type == "return") {
             returnCommend(client, genre, bookName);
@@ -41,8 +37,9 @@ string SendFrame::getBookName(vector<string> &vec) const {
 
 void SendFrame::addCommend(Client& client, string &genre, string &userName, string &bookName) {
     Book book(genre, bookName, userName);
-    if(client.getBooksByGenre(genre) != nullptr){
-        client.getBooksMap()->insert(pair<string, vector<Book> *>(genre, new vector<Book>));
+    if(client.getBooksMap()->count(genre)==0){
+        vector<Book> vec;
+        client.getBooksMap()->insert(pair<string, vector<Book>>(genre, vec));
     }
     client.addBook(book);
     body = userName + " has added the book " + book.getBookName();
@@ -50,13 +47,15 @@ void SendFrame::addCommend(Client& client, string &genre, string &userName, stri
 
 void SendFrame::returnCommend(Client& client, string &genre, const string &bookName) {
     string borrowedFrom;
-    vector<Book>* booksList = client.getBooksByGenre(genre);
-    for (auto it = booksList->begin() ; it != booksList->end(); ++it) {
-        Book b = *it;
-        if (b.getBookName() == bookName) {
-            borrowedFrom = b.getOwner();
-            client.getBooksByGenre(genre)->erase(it);
-            break;
+    if(client.getBooksMap()->count(genre)>0) {
+        vector<Book> &booksList = client.getBooksByGenre(genre);
+        for (auto it = booksList.begin(); it != booksList.end(); ++it) {
+            Book b = *it;
+            if (b.getBookName() == bookName) {
+                borrowedFrom = b.getOwner();
+                client.getBooksByGenre(genre).erase(it);
+                break;
+            }
         }
     }
     body = "Returning " + bookName + " to " + borrowedFrom;

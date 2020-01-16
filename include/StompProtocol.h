@@ -1,7 +1,3 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
 #ifndef BOOST_ECHO_CLIENT_STOMPPROTOCOL_H
 #define BOOST_ECHO_CLIENT_STOMPPROTOCOL_H
 #include <unordered_map>
@@ -28,7 +24,7 @@ private:
     ConnectionHandler& handler;
     bool terminate = false;
     static vector<string> buildVector(string& s);
-    static vector<string>* getAction(MessageFrame &frame);
+    static vector<string> getAction(MessageFrame &frame, vector<string>&);
     void takeAction(MessageFrame &msg, vector<string> &action) const;
     void returnAction(MessageFrame&, vector<string>&) const;
     void borrowAction(MessageFrame&, vector<string>&) const;

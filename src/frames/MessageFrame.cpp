@@ -1,8 +1,3 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
-#include <iostream>
 #include "frames/MessageFrame.h"
 
 const string &MessageFrame::getDestination() const {

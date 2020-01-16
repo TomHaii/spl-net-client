@@ -1,7 +1,3 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
 #ifndef BOOST_ECHO_CLIENT_BOOK_H
 #define BOOST_ECHO_CLIENT_BOOK_H
 

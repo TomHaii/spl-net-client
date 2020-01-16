@@ -1,11 +1,4 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
-#include <iostream>
 #include "frames/ReceiptFrame.h"
-
-
 
 ReceiptFrame::ReceiptFrame(vector<string>& msg):id(0) {
     for(string& word: msg){

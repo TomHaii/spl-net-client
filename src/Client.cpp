@@ -1,19 +1,14 @@
-//
-// Created by yaelgeis@wincs.cs.bgu.ac.il on 13/01/2020.
-//
-
 #include "Client.h"
-
 #include <utility>
 #include <iostream>
 
-unordered_map<string, vector<Book> *> *Client::getBooksMap() const {
+unordered_map<string, vector<Book>> *Client::getBooksMap() const {
     return booksMap;
 }
 
 
-void Client::setName(const string &name) {
-    Client::name = name;
+void Client::setName(const string &_name) {
+    Client::name = _name;
 }
 
 int Client::getSubscriptionId() const {
@@ -35,21 +30,21 @@ void Client::incrementSubscriptionId() {
 }
 
 
-Client::Client(): booksMap(new unordered_map<string,vector<Book>*>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>*>) {}
+Client::Client(): booksMap(new unordered_map<string,vector<Book>>), name(""), subscriptionId(1),receiptId(1), receipts(new unordered_map<int, bool>), topicsSubscriptionsById(new unordered_map<int, string>),requestedBooks(new unordered_map<string,vector<string>>) {}
 
-vector<Book> *Client::getBooksByGenre(string topic){
-    if (booksMap->count(topic)==0)
-        return nullptr;
+vector<Book>& Client::getBooksByGenre(const string& topic){
     return booksMap->at(topic);
 }
 
 void Client::addBook(const Book& book) {
     string topic = book.getGenre();
     if(booksMap->count(topic) == 0) {
-        booksMap->insert(pair<string, vector<Book> *>(topic, new vector<Book>));
-        requestedBooks->insert(pair<string, vector<string>*>(topic, new vector<string>));
+        vector<Book> vec;
+        vector<string> vec2;
+        booksMap->insert(pair<string, vector<Book>>(topic,vec));
+        requestedBooks->insert(pair<string, vector<string>>(topic, vec2));
     }
-    booksMap->at(topic)->push_back(book);
+    booksMap->at(topic).push_back(book);
 }
 
 const string &Client::getUserName() const {
@@ -69,7 +64,7 @@ unordered_map<int, string> *Client::getTopicsSubscriptionsById() {
     return topicsSubscriptionsById;
 }
 
-unordered_map<string, vector<string> *> *Client::getRequestedBooks()  {
+unordered_map<string, vector<string>> *Client::getRequestedBooks()  {
     return requestedBooks;
 }
 

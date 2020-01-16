@@ -1,10 +1,5 @@
-//
-// Created by tomu@wincs.cs.bgu.ac.il on 12/01/2020.
-//
-
 #ifndef BOOST_ECHO_CLIENT_SUBSCRIBEFRAME_H
 #define BOOST_ECHO_CLIENT_SUBSCRIBEFRAME_H
-
 
 #include "Frame.h"
 using namespace std;

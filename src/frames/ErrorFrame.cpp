@@ -1,24 +1,19 @@
-//
-// Created by yaelgeis@wincs.cs.bgu.ac.il on 13/01/2020.
-//
-
 #include "frames/ErrorFrame.h"
 
-ErrorFrame::ErrorFrame(vector<string> &vec) {
+ErrorFrame::ErrorFrame(vector<string> &vec, string& s) {
     for (string &word: vec) {
         if (word.find("receipt-id") != string::npos) {
             int split = word.find(':');
-            word = word.substr(split+1);
+            word = word.substr(split + 1);
             receiptId = stoi(word);
-        } else if (word.find("message") != string::npos) {
-            int split = word.find(':');
-            body = word.substr(split+1);
+            break;
         }
     }
+    body = s;
 }
 
 string ErrorFrame::toString() {
-    return "Error: "+body;
+    return body;
 }
 
 ErrorFrame::~ErrorFrame() {

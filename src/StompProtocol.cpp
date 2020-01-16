@@ -13,26 +13,21 @@ void StompProtocol::process(Frame* frame) {
         FrameType type = frame->getType();
         if (type == MESSAGE) {
             MessageFrame msg = *dynamic_cast<MessageFrame *>(frame);
-            vector<string>* action = getAction(msg);
-            if (action != nullptr) {
-                if (action->at(0) == "return") {
-                    returnAction(msg, *action);
-                } else if (action->at(0) == "take") {
-                    takeAction(msg, *action);
-                } else if (action->at(0) == "borrow") {
-                    borrowAction(msg, *action);
-                } else if (action->at(0) == "hasBook") {
-                    hasBookAction(msg, *action);
+            vector<string> action;
+            getAction(msg, action);
+            if (!action.empty()) {
+                if (action.at(0) == "return") {
+                    returnAction(msg, action);
+                } else if (action.at(0) == "take") {
+                    takeAction(msg, action);
+                } else if (action.at(0) == "borrow") {
+                    borrowAction(msg, action);
+                } else if (action.at(0) == "hasBook") {
+                    hasBookAction(msg, action);
                 }
-                else if (action->at(0) == "status") {
-                    statusAction(msg, *action);
+                else if (action.at(0) == "status") {
+                    statusAction(msg, action);
                 }
-
-                action->clear();
-                delete(action);
-            }
-            else{
-                cout<<"i am trying to print but the action is null"<<endl;
             }
         }
         else if (type == RECEIPT) {
@@ -61,12 +56,13 @@ void StompProtocol::returnAction(MessageFrame &msg,
                                  vector<string> &action) const{
     string book = action.at(1);
     if (action.at(2) == client.getUserName()) {
-        vector<Book> &booksList = *client.getBooksByGenre(msg.getDestination());
-        for (auto &b: booksList){
-            if (b.getBookName() == book) {
-                cout<<"*** i found the book"<<endl;
-                b.free();
-                break;
+        if(client.getBooksMap()->count(msg.getDestination())>0) {
+            vector<Book> booksList = client.getBooksByGenre(msg.getDestination());
+            for (auto &b: booksList) {
+                if (b.getBookName() == book) {
+                    b.free();
+                    break;
+                }
             }
         }
     }
@@ -77,10 +73,12 @@ void StompProtocol::takeAction(MessageFrame &msg,
                                  vector<string> &action) const{
     string book = action.at(1);
     if (action.at(2) == client.getUserName()) {
-        for (auto &b: *client.getBooksByGenre(msg.getDestination())) {
-            if (b.getBookName() == book && b.isAvailable()) {
-                b.acquire();
-                break;
+        if(client.getBooksMap()->count(msg.getDestination())>0) {
+            for (auto &b: client.getBooksByGenre(msg.getDestination())) {
+                if (b.getBookName() == book && b.isAvailable()) {
+                    b.acquire();
+                    break;
+                }
             }
         }
     }
@@ -115,11 +113,13 @@ Frame* StompProtocol::buildFrame(std::string &message) {
     }
     else if(type == "join") {
         string topic = message.substr(5);
-        unordered_map<string, vector<Book>*> *map = client.getBooksMap();
+        unordered_map<string, vector<Book>> *map = client.getBooksMap();
         if(map->count(topic)==0) {
+            vector<string> vec;
+            vector<Book> vec2;
             frame = new SubscribeFrame(message, client.getSubscriptionId(), client.getReceiptId());
-            client.getRequestedBooks()->insert(pair<string, vector<string> *>(topic, new vector<string>));
-            map->insert(pair<string, vector<Book> *>(topic,  new vector<Book>));
+            client.getRequestedBooks()->insert(pair<string, vector<string>>(topic, vec));
+            map->insert(pair<string, vector<Book>>(topic, vec2));
             int id = dynamic_cast<SubscribeFrame *>(frame)->getReceipt();
             client.getTopicsSubscriptionsById()->insert(pair<int, string>(client.getSubscriptionId(), topic));
             client.getReceipts()->insert(pair<int, ReceiptFrame *>(id, nullptr));
@@ -150,76 +150,74 @@ Frame* StompProtocol::buildFrame(std::string &message) {
 }
 
 
-vector<string>* StompProtocol::getAction(MessageFrame& frame) {
+vector<string> StompProtocol::getAction(MessageFrame& frame, vector<string>& output) {
     vector<string> vec = buildVector(frame.getBody());
-    auto* output = new vector<string>;
-
     if(vec.at(0) == "Returning"){    //0 = return, 1= book, 2= returning to
-        output->emplace_back("return");
+        output.emplace_back("return");
         string book;
         for (int i = 1; i < vec.size() - 2; i++){
             string s = vec.at(i);
             book.append(" "+s);
         }
         book = book.substr(1);
-        output->push_back(book);
-        output->push_back(vec.at(vec.size()-1));
+        output.push_back(book);
+        output.push_back(vec.at(vec.size()-1));
     }
     else if(vec.at(0) == "Taking") {  //0= take, 1= book, 2= taken from
-        output->emplace_back("take");
+        output.emplace_back("take");
         string book;
         for (int i = 1; i < vec.size() - 2; i++){
             string s = vec.at(i);
             book.append(" "+s);
         }
         book = book.substr(1);
-        output->push_back(book);
-        output->push_back(vec.at(vec.size()-1));
+        output.push_back(book);
+        output.push_back(vec.at(vec.size()-1));
     }
     else if(vec.size() > 1 && vec.at(1) == "status"){
-        output->emplace_back("status");
+        output.emplace_back("status");
     }
     else if(vec.size() > 1 && vec.at(1) == "wish"){ //0= borrow, 1= name, 2= book
-        output->emplace_back("borrow");
-        output->push_back(vec.at(0));
+        output.emplace_back("borrow");
+        output.push_back(vec.at(0));
         string book;
         for (int i = 4; i < vec.size(); i++){
             string s = vec.at(i);
             book.append(" "+s);
         }
         book = book.substr(1);
-        output->push_back(book);
+        output.push_back(book);
     }
 
     else if (vec.size() > 1 && vec.at(1) == "has" && vec.at(2) != "added"){ //0= hasBook, 1= name, 2= book
-        output->emplace_back("hasBook");
-        output->push_back(vec.at(0));
+        output.emplace_back("hasBook");
+        output.push_back(vec.at(0));
         string book;
         for (int i = 2; i < vec.size(); i++){
             string s = vec.at(i);
             book.append(" "+s);
         }
         book = book.substr(1);
-        output->push_back(book);
+        output.push_back(book);
     }
     else if (vec.size() > 1 && vec.at(1) == "has" && vec.at(2) == "added"){ //0= add, 1= name, 2= book
-        output->emplace_back("add");
-        output->push_back(vec.at(0));
+        output.emplace_back("add");
+        output.push_back(vec.at(0));
         string book;
         for (int i = 5; i < vec.size(); i++){
             string s = vec.at(i);
             book.append(" "+s);
         }
         book = book.substr(1);
-        output->push_back(book);
+        output.push_back(book);
     }
     //replying to book status
     else if (!vec.empty() && vec.at(0) == "Book"){
-        output->emplace_back("status"); //0= status, 1=topic
-        output->push_back(frame.getDestination());
+        output.emplace_back("status"); //0= status, 1=topic
+        output.push_back(frame.getDestination());
     }
     else { //0 == bookStatusReply
-        output->emplace_back("bookStatusReply");
+        output.emplace_back("bookStatusReply");
     }
     return output;
 }
@@ -243,15 +241,17 @@ vector<string> StompProtocol::buildVector(string& s) {
 void StompProtocol::borrowAction(MessageFrame & msg, vector<string> &vec) const {
     string topic = msg.getDestination();
     string book = vec.at(2);
-    for (auto &b: *client.getBooksByGenre(topic)) {
-        if (b.getBookName() == book) {
-            if (b.isAvailable()) {
-                SendFrame sendFrame(client.getUserName() + " has " + book, topic);
+    if(client.getBooksMap()->count(topic)>0) {
+        for (auto &b: client.getBooksByGenre(topic)) {
+            if (b.getBookName() == book) {
+                if (b.isAvailable()) {
+                    SendFrame sendFrame(client.getUserName() + " has " + book, topic);
 //                b.acquire();
-                string str = sendFrame.toString();
-                handler.sendLine(str);
+                    string str = sendFrame.toString();
+                    handler.sendLine(str);
+                }
+                break;
             }
-            break;
         }
     }
 }
@@ -260,23 +260,24 @@ void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const
     string owner = vec.at(1);
     string book = vec.at(2);
     string topic = msg.getDestination();
-    vector<string> *requestedBooks = client.getRequestedBooks()->at(topic);
-    for (auto & requestedBook : *requestedBooks) {
-        {
-            if (requestedBook == book){
-                string str;
-                requestedBooks->erase(remove(requestedBooks->begin(), requestedBooks->end(), requestedBook));
-                str.append("Taking ").append(book).append(" from ").append(owner);
-                Book b(topic, book, owner);
-                client.getBooksByGenre(topic)->push_back(b);
-                SendFrame sendFrame(str, topic);
-                string m = sendFrame.toString();
-                handler.sendLine(m);
-                break;
+    if(client.getBooksMap()->count(topic)>0) {
+        vector<string> &requestedBooks = client.getRequestedBooks()->at(topic);
+        for (auto &requestedBook : requestedBooks) {
+            {
+                if (requestedBook == book) {
+                    string str;
+                    requestedBooks.erase(remove(requestedBooks.begin(), requestedBooks.end(), requestedBook));
+                    str.append("Taking ").append(book).append(" from ").append(owner);
+                    Book b(topic, book, owner);
+                    client.getBooksByGenre(topic).push_back(b);
+                    SendFrame sendFrame(str, topic);
+                    string m = sendFrame.toString();
+                    handler.sendLine(m);
+                    break;
+                }
             }
         }
     }
-
 
 }
 
@@ -284,9 +285,11 @@ void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const 
     string topic = msg.getDestination();
     string name = client.getUserName();
     string books;
-    for (auto &b: *client.getBooksByGenre(topic)){
-        if (b.isAvailable()){
-            books.append(b.getBookName()+",");
+    if(client.getBooksMap()->count(topic)>0) {
+        for (auto &b: client.getBooksByGenre(topic)) {
+            if (b.isAvailable()) {
+                books.append(b.getBookName() + ",");
+            }
         }
     }
     if(!books.empty())
@@ -307,9 +310,6 @@ void StompProtocol::markAsTerminated() {
     terminate = true;
     handler.close();
 
-}
-
-void StompProtocol::setConnected(bool connected) {
 }
 
 

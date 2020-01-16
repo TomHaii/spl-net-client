@@ -1,7 +1,3 @@
-//
-// Created by yaelgeis@wincs.cs.bgu.ac.il on 13/01/2020.
-//
-
 #ifndef BOOST_ECHO_CLIENT_ERRORFRAME_H
 #define BOOST_ECHO_CLIENT_ERRORFRAME_H
 
@@ -16,7 +12,7 @@ private:
 
 public:
     ~ErrorFrame() override ;
-    explicit ErrorFrame(vector<string>&);
+    ErrorFrame(vector<string>&, string&);
     string toString() override;
 };
 
