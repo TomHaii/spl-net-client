@@ -36,7 +36,7 @@ void StompProtocol::receiptFrameCase(Frame *frame) {
         }
     }
     else{
-        this->markAsTerminated();
+        markAsTerminated();
         cout << "logging out" << endl;
     }
 }
@@ -68,7 +68,7 @@ void StompProtocol::returnAction(MessageFrame &msg,
     string book = action.at(1);
     if (action.at(2) == client.getUserName()) {
         if(client.getBooksMap()->count(msg.getDestination())>0) {
-            vector<Book> booksList = client.getBooksByGenre(msg.getDestination());
+            vector<Book> &booksList = client.getBooksByGenre(msg.getDestination());
             for (auto &b: booksList) {
                 if (b.getBookName() == book) {
                     b.free();
@@ -296,6 +296,7 @@ Frame *StompProtocol::logoutCommend(string &message, Frame *frame) const {
     client.getReceipts()->insert(pair<int,bool>(id, false));
     frame = new DisconnectFrame(id);
     client.incrementReceiptId();
+    return frame;
 }
 
 //builds a new frame to the login commend from keyboard
@@ -304,9 +305,11 @@ Frame *StompProtocol::loginCommend(string &message, Frame *frame) const {
         frame = new ConnectFrame(message);
         string name = dynamic_cast<ConnectFrame *>(frame)->getLogin();
         client.setName(name);
+        return frame;
     }
     else{
         cout<<"connection error "<<endl;
+        return nullptr;
     }
 }
 
