@@ -1,13 +1,5 @@
 #include "frames/SubscribeFrame.h"
 
-const string &SubscribeFrame::getDestination() const {
-    return destination;
-}
-
-int SubscribeFrame::getId(){
-    return id;
-}
-
 int SubscribeFrame::getReceipt() {
     return receipt;
 }
@@ -15,14 +7,6 @@ int SubscribeFrame::getReceipt() {
 SubscribeFrame::SubscribeFrame(string & str, int _id, int _receipt):destination(""),id(_id),receipt(_receipt) {
     vector<string> vec = buildVector(str);
     destination = vec.at(1);
-}
-
-void SubscribeFrame::setId(int _id) {
-    id = _id;
-}
-
-void SubscribeFrame::setReceipt(int _receipt) {
-    receipt = _receipt;
 }
 
 string SubscribeFrame::toString() {

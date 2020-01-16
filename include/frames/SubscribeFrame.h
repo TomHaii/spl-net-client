@@ -11,15 +11,7 @@ private:
 public:
     ~SubscribeFrame() override = default;
 
-    const string &getDestination() const;
-
-    int getId();
-
     int getReceipt();
-
-    void setId(int id);
-
-    void setReceipt(int receipt);
 
     SubscribeFrame(string & str, int _id, int _receipt);
 

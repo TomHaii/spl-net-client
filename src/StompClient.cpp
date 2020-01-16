@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <thread>
 #include <KeyboardListener.h>
 #include <ServerListener.h>
@@ -52,7 +51,7 @@ void connectedSuccessfully(ConnectionHandler &handler, Client &client, const Con
 }
 
 void login(ConnectionHandler &handler, string &inputLine) {
-    while (1) {
+    while (true) {
         cout << "please enter login info ";
         const short bufsize = 1024;
         char buf[bufsize];
@@ -62,7 +61,7 @@ void login(ConnectionHandler &handler, string &inputLine) {
         string tmpPort;
         parseLoginInfo(inputLine,tmpPort,host);
         cout << "Sending new connect frame.. " << endl;
-        short port = (short) stoi(tmpPort);
+        auto port = (short) stoi(tmpPort);
         handler.setHost(host);
         handler.setPort(port);
         if (!handler.connect()) {

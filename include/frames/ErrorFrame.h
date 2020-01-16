@@ -7,7 +7,6 @@
 class ErrorFrame: public Frame{
 
 private:
-    int receiptId;
     string body;
 
 public:

@@ -5,7 +5,7 @@ ErrorFrame::ErrorFrame(vector<string> &vec, string& s) {
         if (word.find("receipt-id") != string::npos) {
             int split = word.find(':');
             word = word.substr(split + 1);
-            receiptId = stoi(word);
+            stoi(word);
             break;
         }
     }
