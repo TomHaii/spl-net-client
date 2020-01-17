@@ -2,7 +2,7 @@
 #include <iostream>
 #include <utility>
 
-SendFrame::SendFrame(Client& client, string& str):destination(""), body("") {
+SendFrame::SendFrame(Client& client, string& str):destination(""), body(str) {
     vector<string> vec = buildVector(str);
     string type = vec.at(0);
     string genre = vec.at(1);
@@ -16,11 +16,12 @@ SendFrame::SendFrame(Client& client, string& str):destination(""), body("") {
         if (type == "add") {
             addCommend(client, genre, userName, bookName);
         } else if (type == "borrow") {
-            client.getRequestedBooks()->at(destination).push_back(bookName);
+            client.requestBook(destination,bookName);
             body = userName + " wish to borrow " + bookName;
         } else if (type == "return") {
             returnCommend(client, genre, bookName);
         }
+
     }
 }
 
@@ -37,36 +38,13 @@ string SendFrame::getBookName(vector<string> &vec) const {
 
 void SendFrame::addCommend(Client& client, string &genre, string &userName, string &bookName) {
     Book book(genre, bookName, userName);
-    if(client.getBooksMap()->count(genre) == 0) {
-        vector<Book> vec;
-        vector<string> vec2;
-        client.getBooksMap()->insert(pair<string, vector<Book>>(genre, vec));
-        client.getRequestedBooks()->insert(pair<string, vector<string>>(genre, vec2));
-    }
-    bool exists = false;
-    for (Book &b: client.getBooksByGenre(genre)) {
-        if (b.getBookName() == bookName) {
-            exists = true;
-        }
-    }
-    if(!exists)
-        client.addBook(book);
+    client.addBook(book, genre, bookName);
     body = userName + " has added the book " + book.getBookName();
 }
 
 void SendFrame::returnCommend(Client& client, string &genre, const string &bookName) {
     string borrowedFrom;
-    if(client.getBooksMap()->count(genre)>0) {
-        vector<Book> &booksList = client.getBooksByGenre(genre);
-        for (auto it = booksList.begin(); it != booksList.end(); ++it) {
-            Book b = *it;
-            if (b.getBookName() == bookName) {
-                borrowedFrom = b.getOwner();
-                client.getBooksByGenre(genre).erase(it);
-                break;
-            }
-        }
-    }
+    client.returnBook(borrowedFrom, genre, bookName);
     body = "Returning " + bookName + " to " + borrowedFrom;
 }
 
@@ -78,7 +56,7 @@ string SendFrame::toString() {
 
 }
 
-SendFrame::SendFrame(string msg, string dest): destination(std::move(msg)), body(std::move(dest)){}
+SendFrame::SendFrame(string msg, string dest): body(msg), destination(std::move(dest)){}
 
 SendFrame::~SendFrame() {
     destination.clear();

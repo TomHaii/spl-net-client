@@ -1,5 +1,7 @@
 #include <stompEncoderDecoder.h>
 #include <frames/ErrorFrame.h>
+#include <iostream>
+
 Frame *stompEncoderDecoder::decodeMessage(string &msg) {
     vector<string> vec;
     buildVector(msg,vec);

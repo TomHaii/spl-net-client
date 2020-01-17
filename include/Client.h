@@ -41,16 +41,28 @@ public:
     int getSubscriptionIdByTopic(string& topic);
     bool getReceiptById(int id);
     void setName(const string &name);
-    int getSubscriptionId() const;
     int getReceiptId() const;
     void incrementSubscriptionId();
     void incrementReceiptId();
     unordered_map<int, bool> *getReceipts();
     vector<Book>& getBooksByGenre(const string&);
-    void addBook(const Book&);
+    void addBook(const Book&, const string&, const string&);
     const string &getUserName() const;
     void setDisconnectReceipt(int _disconnectReceipt);
     int getDisconnectReceipt() const;
+    void eraseReceipt(int _id);
+    void eraseTopic(string& s);
+    void setReceiptReceived(int id);
+    void freeBook(const string& , string&);
+    void acquireBook(const string& , string&);
+    void addReceipt(int id);
+    Frame* subscribe(const string& topic, Frame*, string&);
+    bool letBorrow(const string& topic, string& book);
+    string takeBook(string& topic, string& book, string& owner);
+    string buildBooksList(const string& s);
+    void requestBook(const string& topic, const string& book);
+    void addBook(const Book &book);
+    void returnBook(string& borrowedFrom, const string& topic, const string& bookName);
 };
 
 

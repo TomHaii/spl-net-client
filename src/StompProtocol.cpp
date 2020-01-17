@@ -28,13 +28,13 @@ void StompProtocol::process(Frame* frame) {
 
 void StompProtocol::receiptFrameCase(Frame *frame) {
     int id = dynamic_cast<ReceiptFrame *>(frame)->getId();
-    if(this->client.getDisconnectReceipt() != id) {
+    if(client.getDisconnectReceipt() != id) {
         if (!client.getReceiptById(id)) {
-            client.getReceipts()->at(id) = true;
+            client.setReceiptReceived(id);
         } else {
             string topic = client.getTopicsSubscriptionsById()->at(id);
-            client.getReceipts()->erase(id);
-            client.getBooksMap()->erase(topic);
+            client.eraseReceipt(id);
+            client.eraseTopic(topic);
         }
     }
     else{
@@ -49,16 +49,16 @@ void StompProtocol::messageFrameCase(Frame *frame) const {
     getAction(msg, action);
     if (!action.empty()) {
         if (action.at(0) == "return") {
-            this->returnAction(msg, action);
+            returnAction(msg, action);
         } else if (action.at(0) == "take") {
-            this->takeAction(msg, action);
+            takeAction(msg, action);
         } else if (action.at(0) == "borrow") {
-            this->borrowAction(msg, action);
+            borrowAction(msg, action);
         } else if (action.at(0) == "hasBook") {
-            this->hasBookAction(msg, action);
+            hasBookAction(msg, action);
         }
         else if (action.at(0) == "status") {
-            this->statusAction(msg, action);
+            statusAction(msg, action);
         }
     }
 }
@@ -70,13 +70,7 @@ void StompProtocol::returnAction(MessageFrame &msg,
     string book = action.at(1);
     if (action.at(2) == client.getUserName()) {
         if(client.getBooksMap()->count(msg.getDestination())>0) {
-            vector<Book> &booksList = client.getBooksByGenre(msg.getDestination());
-            for (auto &b: booksList) {
-                if (b.getBookName() == book) {
-                    b.free();
-                    break;
-                }
-            }
+            client.freeBook(msg.getDestination(), book);
         }
     }
 }
@@ -86,14 +80,8 @@ void StompProtocol::takeAction(MessageFrame &msg,
                                  vector<string> &action) const{
     string book = action.at(1);
     if (action.at(2) == client.getUserName()) {
-        if(client.getBooksMap()->count(msg.getDestination())>0) {
-            for (auto &b: client.getBooksByGenre(msg.getDestination())) {
-                if (b.getBookName() == book && b.isAvailable()) {
-                    b.acquire();
-                    break;
-                }
-            }
-        }
+        client.acquireBook(msg.getDestination(), book);
+
     }
 }
 
@@ -111,7 +99,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
     }
     else if(type == "exit") {
         string topic = message.substr(5);
-        if(client.getBooksMap()->count(topic)>0)
+//        if(client.getBooksMap()->count(topic)>0)
             frame = new UnsubscribeFrame(message, client);
     }
     else if(type == "logout") {
@@ -128,20 +116,7 @@ Frame* StompProtocol::buildFrame(std::string &message) {
 //builds a new frame to the join commend from keyboard
 Frame *StompProtocol::joinCommend(string &message, Frame *frame)  const{
     string topic = message.substr(5);
-    unordered_map<string, vector<Book>> *map = this->client.getBooksMap();
-    if(map->count(topic)==0) {
-        vector<string> vec;
-        vector<Book> vec2;
-        frame = new SubscribeFrame(message, this->client.getSubscriptionId(), this->client.getReceiptId());
-        client.getRequestedBooks()->insert(pair<string, vector<string>>(topic, vec));
-        map->insert(pair<string, vector<Book>>(topic, vec2));
-        int id = dynamic_cast<SubscribeFrame *>(frame)->getReceipt();
-        client.getTopicsSubscriptionsById()->insert(pair<int, string>(this->client.getSubscriptionId(), topic));
-        client.getReceipts()->insert(pair<int, ReceiptFrame *>(id, nullptr));
-        client.incrementReceiptId();
-        client.incrementSubscriptionId();
-    }
-    return frame;
+    return client.subscribe(topic, frame, message);
 }
 
 
@@ -204,22 +179,17 @@ vector<string> StompProtocol::buildVector(string& s) {
     return vec;
 }
 
-//this is a reaction function to the "borrowing book from ___" message
+//this is a reaction function to the "__ wish to borrow book" message
 void StompProtocol::borrowAction(MessageFrame & msg, vector<string> &vec) const {
     const string& topic = msg.getDestination();
     string book = vec.at(2);
-    if(client.getBooksMap()->count(topic)>0) {
-        for (auto &b: client.getBooksByGenre(topic)) {
-            if (b.getBookName() == book) {
-                if (b.isAvailable()) {
-                    SendFrame sendFrame(client.getUserName() + " has " + book, topic);
-                    string str = sendFrame.toString();
-                    handler.sendLine(str);
-                }
-                break;
-            }
-        }
+    if(client.letBorrow(topic, book)) {
+        SendFrame sendFrame(client.getUserName() + " has " + book, topic);
+        string str = sendFrame.toString();
+        cout << "***printing: " + str << endl;
+        handler.sendLine(str);
     }
+
 }
 
 //this is a reaction function to the "___ has book" message
@@ -227,24 +197,9 @@ void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const
     string owner = vec.at(1);
     string book = vec.at(2);
     string topic = msg.getDestination();
-    if(client.getBooksMap()->count(topic)>0) {
-        vector<string> &requestedBooks = client.getRequestedBooks()->at(topic);
-        for (auto &requestedBook : requestedBooks) {
-            {
-                if (requestedBook == book) {
-                    string str;
-                    requestedBooks.erase(remove(requestedBooks.begin(), requestedBooks.end(), requestedBook), requestedBooks.end());
-                    str.append("Taking ").append(book).append(" from ").append(owner);
-                    Book b(topic, book, owner);
-                    client.addBook(b);
-                    SendFrame sendFrame(str, topic);
-                    string m = sendFrame.toString();
-                    handler.sendLine(m);
-                    break;
-                }
-            }
-        }
-    }
+    string m = client.takeBook(topic, book, owner);
+    if(!m.empty())
+        handler.sendLine(m);
 
 }
 
@@ -252,16 +207,7 @@ void StompProtocol::hasBookAction(MessageFrame & msg, vector<string> &vec) const
 void StompProtocol::statusAction(MessageFrame & msg, vector<string> &vec) const {
     const string& topic = msg.getDestination();
     string name = client.getUserName();
-    string books;
-    if(client.getBooksMap()->count(topic)>0) {
-        for (auto &b: client.getBooksByGenre(topic)) {
-            if (b.isAvailable()) {
-                books.append(b.getBookName() + ",");
-            }
-        }
-    }
-    if(!books.empty())
-        books = books.substr(0,books.size()-1);
+    string books = client.buildBooksList(topic);
     string str =  client.getUserName() +":" +books;
     SendFrame sendFrame(str, topic);
     string m = sendFrame.toString();
@@ -293,7 +239,7 @@ void StompProtocol::getActionType(string &type, string &message) {
 Frame *StompProtocol::logoutCommend(string &message, Frame *frame) const {
     int id = client.getReceiptId();
     client.setDisconnectReceipt(id);
-    client.getReceipts()->insert(pair<int,bool>(id, false));
+    client.addReceipt(id);
     frame = new DisconnectFrame(id);
     client.incrementReceiptId();
     return frame;

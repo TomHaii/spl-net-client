@@ -1,3 +1,4 @@
+#include <iostream>
 #include "frames/SubscribeFrame.h"
 
 int SubscribeFrame::getReceipt() {
