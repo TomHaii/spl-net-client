@@ -120,7 +120,7 @@ Client &Client::operator=(const Client &t) {
 }
 
 void Client::eraseTopic(string &s) {
-    lock_guard<mutex> lock(booksMap_lock); //TODO:check
+    lock_guard<mutex> lock(booksMap_lock);
     booksMap->erase(s);
 }
 
